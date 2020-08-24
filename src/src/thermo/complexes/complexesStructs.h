@@ -5,15 +5,12 @@
 
   Header file containing structs for use with complexes.c.
 */
+#ifndef NUPACK_COMPLEXES_STRUCTS_H__
+#define NUPACK_COMPLEXES_STRUCTS_H__
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "runtime_constants.h"
-
-#ifndef STRUCTS_H
-#define STRUCTS_H
 
 struct LList{
   int nSeqs;
@@ -73,9 +70,11 @@ typedef struct {
   long double magnesiumconc;
   int uselongsalt;
   int dodefect;
+  int v3;
 } globalArgs_t;
 
-#endif
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* __cplusplus */

@@ -41,9 +41,7 @@
 #include <string.h>
 #include <signal.h>
 
-
-#include "pfuncUtilsHeader.h"
-#include "DNAExternals.h"
+#include <thermo/core.h>
 
 /* ************************************************ */
 
@@ -73,7 +71,7 @@ int main( int argc, char *argv[] ) {
     exit(1);
   }
 
-  header( argc, argv, "pfunc","screen");
+  header( argc, argv, "pfunc", "screen");
 
   if( !inputFileSpecified || 
       !ReadInputFile( inputFile, seq, &vs, NULL, NULL, NULL) ) {
@@ -81,7 +79,7 @@ int main( int argc, char *argv[] ) {
        else abort();
   }
   
-  printInputs( argc, argv, seq, vs, NULL, NULL,"screen");
+  printInputs( argc, argv, seq, vs, NULL, NULL, "screen");
   
   if( !DO_PSEUDOKNOTS ) {
     complexity = 3;

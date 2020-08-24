@@ -30,8 +30,9 @@
 */
 
 
-#include "ConcentrationsHeaderFile.h" // File with important definitions
+#include "InputFileReader.h" // File with important definitions
 #include <float.h>
+#include "constants.h"
 
 
 // Structures for storing input and subsequent sorting
@@ -477,7 +478,7 @@ double ReadInputFiles(int ***A, double **G, int **CompIDArray, int **PermIDArray
       j++;
     }
     if (j < cTotal) {
-      printf("\n\nWarning: At least one free energy is > 0.\n");
+      printf("\n\nWarning: At least one free energy is > 0. %lf\n", (*G)[j]);
       printf("It is likely there is an input error.\n");
       printf("If there is such an error, the the program will still run\n");
       printf("normally and give results, which may be nonsensical.\n");

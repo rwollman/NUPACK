@@ -1,9 +1,13 @@
+
 #include "design_engine.h"
+#include <shared.h>
+#include <thermo.h>
 
 int main(int argc, char **argv) {
 
 int myrank = 0;
   
+  SetExecutionPath(argc, argv);
   if (myrank == 0) {
   
   char *inputPrefix = (char*)calloc(MAX_FILENAME_SIZE,sizeof(char));
@@ -47,7 +51,7 @@ int myrank = 0;
   foldFile = (char *)calloc(MAX_FILENAME_SIZE,sizeof(char));
   
   sprintf(foldFile, "%s", inputPrefix);
-   char *initFilename = (char *)calloc(MAX_FILENAME_SIZE, sizeof(char));
+  char *initFilename = (char *)calloc(MAX_FILENAME_SIZE, sizeof(char));
   sprintf(initFilename, "%s.init", foldFile);
   
   FILE *initFile = NULL;
@@ -438,7 +442,7 @@ int myrank = 0;
       loctime = localtime(&start_time_t);
 
       fprintf(bpf, "{\n");
-      fprintf(bpf, "\t\"NUPACK version\":\"%s\",\n",VERSION);
+      fprintf(bpf, "\t\"NUPACK version\":\"%s\",\n", NUPACK_VERSION);
       fprintf(bpf, "\t\"program\":\"design\",\n");
       char * time_src = asctime(loctime);
       int time_len = strlen(time_src);

@@ -1,0 +1,18 @@
+# set properties
+material = dna
+seed = 93 # set seed to make design repeatable
+
+# define target structure for 1 on-target complex
+structure legs = ((((((((((((((((((((.......................+.......................))))))))))))))))))))
+
+# define target test tube containing 1 on-target complex 
+tube walker = legs
+
+# define target concentration for 1 on-target complex (molar) 
+# default: 1.0e-6
+walker.legs.conc = 1.0e-6
+
+# augment target test tube with all off-target complexes of up to 2 strands
+# default: 0
+walker.maxsize = 2
+

@@ -2,7 +2,8 @@
 #define DESIGN_H
 
 
-
+#include <shared.h>
+#include <thermo.h>
 #include "design_utils.h"
 
 #ifdef DEBUG

@@ -1,0 +1,30 @@
+#
+# This script runs NUPACK executables for test tube design 
+#
+# The target test tube contains 1 on-target dimer 
+# (with a target structure and target concentration)
+# plus all off-target complexes of up to 2 strands 
+# (each with vanishing target concentration)
+#
+# Material is DNA, temperature is 37 C
+#
+# Justin Bois  (13 January, 2007)
+# Niles Pierce (11 October, 2014) 
+#
+printf "************************************************** \n"
+printf "run jobs for tube-design: simple examples          \n"
+printf "************************************************** \n"
+
+printf   "* Reading files from input directory \n"
+
+printf   "* Running: tubedefect \n"
+tubedefect input/walker-defect ;
+
+printf   "* Running: tubedesign \n"
+tubedesign input/walker-design ;
+
+mv input/walker-defect.out output/ ;
+mv input/walker-design.out output/ ;
+printf   "* See results in output directory\n\n"
+
+

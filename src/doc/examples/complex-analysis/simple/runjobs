@@ -1,0 +1,44 @@
+#
+# This script runs several NUPACK executables to perform complex analysis
+# for a bipedal walker described in Shin and Pierce, J Am Chem Soc, 2004
+#
+# Complex is a dimer, material is DNA, temperature is 37 C
+#
+# Justin Bois  (13 January 2007)
+# Niles Pierce (11 October 2014) 
+#
+printf "************************************************** \n"
+printf "run jobs for complex-analysis: simple examples     \n"
+printf "************************************************** \n"
+
+printf   "* Reading files from input directory \n"
+
+printf   "* Running: pfunc \n"
+pfunc -material dna -multi input/walker > output/walker.pfunc ;
+
+printf   "* Running: pairs \n"
+pairs -material dna -multi input/walker ;
+
+printf   "* Running: mfe \n"
+mfe -material dna -multi input/walker ;
+
+printf   "* Running: subopt \n"
+subopt -material dna -multi input/walker-subopt ;
+
+printf   "* Running: count \n"
+count -multi input/walker > output/walker.count ;
+
+printf   "* Running: energy \n"
+energy -material dna -multi input/walker-struct > output/walker.energy ;
+
+printf   "* Running: prob \n"
+prob -material dna -multi input/walker-struct > output/walker.prob ;
+
+printf   "* Running: complexdefect \n"
+complexdefect -material dna -multi input/walker-struct > output/walker.complexdefect ;
+
+mv input/walker.ppairs output/walker.ppairs ;
+mv input/walker.epairs output/walker.epairs ;
+mv input/walker.mfe output/walker.mfe ;
+mv input/walker-subopt.subopt output/walker.subopt ;
+printf   "* See results in output directory\n\n"

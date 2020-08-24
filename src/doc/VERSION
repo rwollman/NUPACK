@@ -1,5 +1,5 @@
 NUPACK SOURCE CODE VERSION HISTORY
-Copyright (c) 2010 Caltech. All rights reserved.
+Copyright (c) 2017 Caltech. All rights reserved.
 
 Version 1.0 (October 1, 2003):
 Initial release, single-stranded partition function capabilities.
@@ -28,7 +28,8 @@ Version 3.0 (November 10, 2010):
         * symmetry calculation fixed for some cases.
 
   New functionality:
-        * Nucleic acid sequence design via efficient ensemble defect optimization
+        * Nucleic acid sequence design via efficient ensemble defect
+          optimization
         * Ensemble defect calculations
         * DNA salt corrections
         * Improved run times due to code optimization
@@ -39,13 +40,18 @@ Version 3.0.4 (March 15, 2014):
         * pseudoknot energy calculation fix for pseudoknots within loops
 
 Version 3.0.5 (January 22, 2015):
- 	* Improved consistency of Makefile behavior across src tree levels
-  	* Default compilation uses -O3 optimization
-  	* Addressed syntactic discrepancies (e.g., variables used before set, parameter mismatches)
-  	* Cleaned out unused variables and obsolete ptmalloc3
-	* Updated software license
-	* Added scripts "runall" and "diffall" in $NUPACKHOME/doc/examples
+  * Improved consistency of Makefile behavior across src tree levels
+    * Default compilation uses -O3 optimization
+    * Addressed syntactic discrepancies (e.g., variables used before set,
+      parameter mismatches)
+    * Cleaned out unused variables and obsolete ptmalloc3
+  * Updated software license
+  * Added scripts "runall" and "diffall" in $NUPACKHOME/doc/examples
 
 Version 3.0.6 (May 13, 2016):
- 	* Fixed bug with "--dangles all" setting in partition function code
+  * Fixed bug with "--dangles all" setting in partition function code
     
+Version 3.1.0 (February 22, 2017)
+  * Inclusion of "tubedesign" and "tubedefect" executables for 
+    test tube design   
+  * Change from Unix Makefiles to CMake

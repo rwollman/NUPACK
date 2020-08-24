@@ -59,10 +59,8 @@
 */
 
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>  // Must compile with -lm option
-#include "ConcentrationsHeaderFile.h" // Header file for concentrations
+#include "CalcConc.h"
+#include "constants.h"
 
 /* ******************************************************************************** */
 
@@ -70,10 +68,10 @@
 /*                              BEGIN CALCCONC FUNCTION                             */
 /* ******************************************************************************** */
 int CalcConc(double *x, int **A, double *G, double *x0, int numSS, int numTotal, 
-	     int MaxIters, double tol, double deltaBar, double eta, double kT, 
-	     int MaxNoStep, int MaxTrial, double PerturbScale, int quiet, 
-	     int WriteLogFile, char *logFile, double MolesWaterPerLiter,
-	     unsigned long seed) {
+         int MaxIters, double tol, double deltaBar, double eta, double kT, 
+         int MaxNoStep, int MaxTrial, double PerturbScale, int quiet, 
+         int WriteLogFile, char *logFile, double MolesWaterPerLiter,
+         unsigned long seed) {
   /*
     Computes the equilbrium mole fractions of species in dilute
     solution using a trust region algorithm on the dual problem.
@@ -148,8 +146,8 @@ int CalcConc(double *x, int **A, double *G, double *x0, int numSS, int numTotal,
     // Calculate the counts of the species based on lambda
     if (getx(x,lambda,G,AT,numSS,numTotal) == 0) { // Should be fine; checked prev.
       if (quiet == 0) {
-	printf("Overflow error in calcution of mole fractions.\n\n");
-	printf("Exiting....\n");
+    printf("Overflow error in calcution of mole fractions.\n\n");
+    printf("Exiting....\n");
       }
       exit(ERR_OVERFLOW);
     }
@@ -172,7 +170,7 @@ int CalcConc(double *x, int **A, double *G, double *x0, int numSS, int numTotal,
     
     // Run trust region with these initial conditions
     while (iters < MaxIters && CheckTol(Grad,AbsTol,numSS) == 0 
-	   && nNoStep < MaxNoStep) {
+      && nNoStep < MaxNoStep) {
       
 
       // Compute the Hessian (symmetric, positive, positive definite)
@@ -186,28 +184,28 @@ int CalcConc(double *x, int **A, double *G, double *x0, int numSS, int numTotal,
       
       // Adjust delta and make step based on rho
       if (rho < 0.25) {
-	delta /= 4.0;
+        delta /= 4.0;
       }
       else if (rho > 0.75 && fabs(norm(p,numSS) - delta) < NUM_PRECISION) {
-	delta = min2(2.0*delta,deltaBar);
+        delta = min2(2.0*delta,deltaBar);
       }
-      if (rho > eta) {
-	for (i = 0; i < numSS; i++) {
-	  lambda[i] += p[i];
-	}
-	nNoStep = 0;	
+      if (rho > eta) {    
+        for (i = 0; i < numSS; i++) {
+          lambda[i] += p[i];
+        }
+        nNoStep = 0;    
       }
       else {
-	nNoStep++;
+        nNoStep++;
       }
       
       // Calculate the mole fractions of the complexes based on lambda
       if (getx(x,lambda,G,AT,numSS,numTotal) == 0) {// Should be fine;checked prev.
-	if (quiet == 0) {
-	  printf("Overflow error in calcution of mole fractions.\n\n");
-	  printf("Exiting....\n");
-	}
-	exit(ERR_OVERFLOW);
+        if (quiet == 0) {
+          printf("Overflow error in calcution of mole fractions.\n\n");
+          printf("Exiting....\n");
+        }
+        exit(ERR_OVERFLOW);
       }
       
       // Calculate the gradient
@@ -258,7 +256,7 @@ int CalcConc(double *x, int **A, double *G, double *x0, int numSS, int numTotal,
   if (WriteLogFile) {
     if ((fplog = fopen(logFile,"a")) == NULL) {
       if (quiet == 0) {
-	printf("Error opening %s.\n\nExiting....\n",logFile);
+        printf("Error opening %s.\n\nExiting....\n",logFile);
       }
       exit(ERR_LOG);
     }
@@ -273,18 +271,18 @@ int CalcConc(double *x, int **A, double *G, double *x0, int numSS, int numTotal,
     fprintf(fplog,"         No. of Cauchy steps: %d\n",RunStats[1]);
     fprintf(fplog,"         No. of dogleg steps: %d\n",RunStats[2]);
     fprintf(fplog,"         No. of Cholesky failures resulting in Cauchy steps: %d\n"
-	    ,RunStats[3]);
+      ,RunStats[3]);
     fprintf(fplog,"         No. of inconsequential Cholesky failures: %d\n",
-	    RunStats[4]);
+      RunStats[4]);
     fprintf(fplog,"         No. of dogleg failures: %d\n",RunStats[5]);
     fprintf(fplog,"         Error in conservation of mass (units of molarity):\n");
     fprintf(fplog,"              Error\tTolerance\n");
     for (i = 0; i < numSS; i++) {
       fprintf(fplog, "           %.14e\t%.14e\n",Grad[i]*MolesWaterPerLiter,
-	      AbsTol[i]*MolesWaterPerLiter);
+          AbsTol[i]*MolesWaterPerLiter);
     }
     fprintf(fplog,"   --Free energy of solution = %.14e kcal/litre of solution\n",
-	    FreeEnergy);
+        FreeEnergy);
     fclose(fplog);
   }
   /* **************** END OF WRITING OUT RESULTS **************************** */
@@ -319,8 +317,8 @@ int CalcConc(double *x, int **A, double *G, double *x0, int numSS, int numTotal,
 
 /* ******************************************************************************** */
 void getInitialGuess(double *x0, double *lambda, double *G, int **AT, int **A, 
-		     int numSS, int numTotal, double PerturbScale, 
-		     unsigned long rand_seed) {
+             int numSS, int numTotal, double PerturbScale, 
+             unsigned long rand_seed) {
   /*
     Calculates an initial guess for lambda such that the maximum mole
     fraction calculated will not give an overflow error and the
@@ -434,7 +432,7 @@ void getHes(double **Hes, double *x, int **A, int numSS, int numTotal) {
   for (n = 0; n < numSS; n++) {
     for (m = 0; m <= n; m++) {
       for (j = 0; j < numTotal; j++) {
-	Avec[j] = ((double) A[m][j]) * ((double) A[n][j]);
+    Avec[j] = ((double) A[m][j]) * ((double) A[n][j]);
       }
       Hes[m][n] = dot(x,Avec,numTotal);
     }
@@ -537,7 +535,7 @@ int getSearchDir(double *p, double *Grad, double **Hes, double delta, int numSS)
     pB2 = dot(pB,pB,numSS);
     if (pB2 <= delta2) {
       for (i = 0; i < numSS; i++) {
-	p[i] = pB[i];
+    p[i] = pB[i];
       }
       free(pB);
       return 1; // Signifies we took a pure Newton step
@@ -650,7 +648,7 @@ int getSearchDir(double *p, double *Grad, double **Hes, double delta, int numSS)
 
 /* ******************************************************************************** */
 double getRho(double *lambda, double *p, double *Grad, double *x, double **Hes, 
-	      double *x0, double *G, int **AT, int numSS, int numTotal) {
+          double *x0, double *G, int **AT, int numSS, int numTotal) {
   /*
     Calculates rho based on equations 4.4 and 4.1 of Nocedal and
     Wright.  This is the ratio of the actual correction based on the
@@ -715,7 +713,7 @@ double getRho(double *lambda, double *p, double *Grad, double *x, double **Hes,
 
 /* ******************************************************************************** */
 void getCauchyPoint(double *CauchyPoint, double **Hes, double *Grad, double delta, 
-		    int numSS) {
+            int numSS) {
   /*
    Computes the Cauchy point using the formulas 4.7 and 4.8 in Nocedal
    and Wright, Numerical Optimization (1999), page 70.
@@ -753,7 +751,7 @@ void getCauchyPoint(double *CauchyPoint, double **Hes, double *Grad, double delt
 
 /* ******************************************************************************** */
 void PerturbLambda(double *lambda, double PerturbScale, double *G, int **AT, 
-		   int numSS, int numTotal) {
+           int numSS, int numTotal) {
   /*
     Perturbs the values of Lambda in case the trust region has shrunk to be 
     very small.

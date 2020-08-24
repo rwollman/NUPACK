@@ -9,7 +9,9 @@
 */
 
 
-#include "ConcentrationsHeaderFile.h" // Concentrations header file
+#include "OutputWriter.h" // Concentrations header file
+#include <shared.h> // Concentrations header file
+#include "constants.h" // Concentrations header file
 
 /* *************************** STRUCTURE FOR SORTING ************************ */
 // Structure for sorting output that includes permutations

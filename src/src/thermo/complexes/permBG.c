@@ -25,10 +25,11 @@
 // modified by Robert Dirks 10/08/04
 // for incorporation into my multistranded pf code
 
+#include "permBG.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include "complexesUtils.h"
 
-#include "complexesHeader.h"
 
 //global variables
 int n,t,cnt,calls;

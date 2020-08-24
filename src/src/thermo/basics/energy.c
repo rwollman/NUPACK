@@ -9,14 +9,13 @@
   for a given sequence or set of sequences.
  */
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<math.h>
-#include<time.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+#include <string.h>
 
-#include "pfuncUtilsHeader.h"
-#include "DNAExternals.h"
+#include <thermo/core.h>
 
 /* ************************************************ */
 
@@ -68,7 +67,7 @@ int main( int argc, char *argv[] ) {
 
   // Check to see if the results is close to NAD_INFINITY and report
   // error if it is
-  if (fabs(1.0 - ene/NAD_INFINITY) < INF_CUTOFF) {
+  if (ABS_FUNC(1.0 - ene/NAD_INFINITY) < INF_CUTOFF) {
     printf("\n\n*** Error: invalid base pair(s) or disconnected complex. Check your inputs. ***\n\n");
     return 0;
   }

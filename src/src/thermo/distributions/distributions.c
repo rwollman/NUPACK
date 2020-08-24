@@ -23,8 +23,12 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
-#include "DistributionsHeaderFile.h" // File with constants and function prototypes
 
+#include "InputFileReader.h"
+#include "OutputWriter.h"
+#include "CalcDist.h"
+#include "constants.h"
+#include "ReadCommandLine.h"
 
 /* ******************************************************************************** */
 /*                                    BEGIN MAIN                                    */
@@ -70,11 +74,15 @@ int main(int argc, char *argv[]) {
   FILE *fpdist; // The .dist file, which contains the output of the file.
   FILE *fpLam; // The file to which Lambda is written
   int NUPACK_VALIDATE ; // if set to 1 print out to 14 decimal places
+
+  /* version 3 output */
+  int v3;
   
   // Read command line arguments
   ReadCommandLine(argc,argv,cxFile,countFile,logFile,distFile,LambdaFile,&SortOutput,
                   &WriteLambda,&MaxSizeLambda,&kT,&quiet,&WriteLogFile,&Toverride,
-                  &NoPermID,&NUPACK_VALIDATE);
+                  &NoPermID,&NUPACK_VALIDATE, &v3);
+
   
   // Get the start time of the calculation
   StartTime = time(NULL);
@@ -91,7 +99,7 @@ int main(int argc, char *argv[]) {
     }
     //fclose(fplog);
     //fplog=stderr;
-    fprintf(fplog,"*NUPACK %s\n",VERSION);
+    fprintf(fplog,"*NUPACK %s\n", NUPACK_VERSION);
     fprintf(fplog,"*This is %s, a log file generated for a distributions\n",logFile);
     fprintf(fplog," calculation using input files %s and %s.\n",cxFile,countFile);
     fprintf(fplog,"*Command used: ");
@@ -121,7 +129,7 @@ int main(int argc, char *argv[]) {
     }
     exit(ERR_DIST);
   }
-  fprintf(fpdist,"%% NUPACK %s\n",VERSION);
+  fprintf(fpdist,"%% NUPACK %s\n", NUPACK_VERSION);
   fprintf(fpdist,"%% This is %s, an output file generated for a \n",distFile);
   fprintf(fpdist,"%% calculation of equilibrium complex count distributions.\n");
   fprintf(fpdist,"%% Time calculation was begun: %s",StartTimeStr);
@@ -136,7 +144,7 @@ int main(int argc, char *argv[]) {
       }
       exit(ERR_LAMBDA);
     }
-    fprintf(fpLam,"%% NUPACK %s\n",VERSION);
+    fprintf(fpLam,"%% NUPACK %s\n", NUPACK_VERSION);
     fprintf(fpLam,"%% This is %s, an output file generated for a \n",LambdaFile);
     fprintf(fpLam,"%% calculation of equilibrium complex count distributions.\n");
     fprintf(fpLam,"%% The contents of this file is the Lambda, the set of\n");

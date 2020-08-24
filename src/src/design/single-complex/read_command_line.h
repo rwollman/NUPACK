@@ -9,15 +9,13 @@
 #include <time.h>
 #include <ctype.h>
 
-#include "pfuncUtilsHeader.h"
-#include "physical_constants.h"
-#include "runtime_constants.h"
-#include "DNAExternals.h"
-#include "design_constants.h"
+#include "design_utils.h"
+#include <shared.h>
+#include <thermo.h>
+
 
 void displayHelp(void);
 void makeUCase(char *line);
-void print_design_help(void);
 void readCommandLine(int nargs, char **args, char* inputPrefix, char *psFile, int *initMode, 
 			int *bypassDesign, int *bypassHeirarchy, int *bypassGuidance, int *designMode, 
 		     int *loadSeeds, int *mReopt, int * mLeafopt, DBL_TYPE *nRatio, int *loadInit,

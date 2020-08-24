@@ -1,0 +1,48 @@
+#
+# This script runs several NUPACK Utilities executables 
+# on a human telomerase RNA described in 
+# Dirks and Pierce, J Comput Chem, 2004
+#
+# Executables pfunc, pairs, mfe, subopt, count, energy, prob, and complexdefect 
+# operate on a single strand including a class of pseudoknots
+#
+# Material is RNA, temperature is 37C 
+#
+# Justin Bois  (13 January, 2007)
+# Niles Pierce (11 October, 2014) 
+#
+printf "************************************************** \n"
+printf "run jobs for complex-analysis: pseudoknot examples \n"
+printf "************************************************** \n"
+
+printf   "* Reading files from input directory\n"
+
+printf   "* Running: pfunc \n"
+pfunc -pseudo input/telomerase > output/telomerase.pfunc ;
+
+printf   "* Running: pairs \n"
+pairs -pseudo input/telomerase ;
+
+printf   "* Running: mfe \n"
+mfe -pseudo input/telomerase ;
+
+printf   "* Running: subopt \n"
+subopt -pseudo input/telomerase-subopt ;
+
+printf   "* Running: count \n"
+count -pseudo input/telomerase > output/telomerase.count ;
+
+printf   "* Running: energy \n"
+energy -pseudo input/telomerase-struct > output/telomerase.energy ;
+
+printf   "* Running: prob \n"
+prob -pseudo input/telomerase-struct > output/telomerase.prob ;
+
+printf   "* Running: complexdefect \n"
+complexdefect -pseudo input/telomerase-struct > output/telomerase.complexdefect ;
+
+mv input/telomerase.ppairs output/telomerase.ppairs ;
+mv input/telomerase.mfe output/telomerase.mfe ;
+mv input/telomerase-subopt.subopt output/telomerase.subopt ;
+printf   "* See results in output directory\n\n"
+
