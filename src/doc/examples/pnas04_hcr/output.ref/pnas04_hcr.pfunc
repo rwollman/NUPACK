@@ -1,0 +1,15 @@
+% NUPACK 3.0
+% Program: pfunc
+% Start time: Tue Feb  3 09:23:53 2015
+% Command: /Users/niles/Documents/research/nupack3.0.5c/bin/pfunc -T 23 -material dna -multi pnas04_hcr_basic 
+% Sequence:  AGTCTAGGATTCGGCGTGGGTTAA+TTAACCCACGCCGAATCCTAGACTCAAAGTAGTCTAGGATTCGGCGTG+TTAACCCACGCCGAATCCTAGACTCAAAGTAGTCTAGGATTCGGCGTG+AGTCTAGGATTCGGCGTGGGTTAACACGCCGAATCCTAGACTACTTTG
+% v(pi): 1
+% Parameters: DNA, 1998
+% Dangles setting: 1
+% Temperature (C): 23.0
+% Sodium concentration: 1.0000 M
+% Magnesium concentration: 0.0000 M
+%
+% Free energy (kcal/mol) and partition function:
+-1.21970714e+02
+1.02444390480969e+90

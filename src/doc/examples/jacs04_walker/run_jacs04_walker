@@ -1,0 +1,74 @@
+#
+# This is a shell script to run the executables of NUPACK 3.0 on
+# the example jacs04_walker.
+#
+# Uses DNA parameter sets.  All complexes are multistranded.
+# T = 37 C.
+#
+
+# Run programs
+printf "\n*******************************\n"
+printf "*      Now running pfunc      *\n"
+printf "*******************************\n\n"
+$NUPACKHOME/bin/pfunc -material dna -multi jacs04_walker_basic > output/jacs04_walker.pfunc ;
+
+printf "\n*******************************\n"
+printf "*      Now running pairs      *\n"
+printf "*******************************\n\n"
+$NUPACKHOME/bin/pairs -material dna -multi jacs04_walker_basic ;
+
+printf "\n*******************************\n"
+printf "*       Now running mfe       *\n"
+printf "*******************************\n\n"
+$NUPACKHOME/bin/mfe -material dna -multi jacs04_walker_basic ;
+
+printf "\n*******************************\n"
+printf "*     Now running subopt      *\n"
+printf "*******************************\n\n"
+$NUPACKHOME/bin/subopt -material dna -multi jacs04_walker_basic_subopt ;
+
+printf "\n*******************************\n"
+printf "*      Now running count      *\n"
+printf "*******************************\n\n"
+$NUPACKHOME/bin/count -multi jacs04_walker_basic > output/jacs04_walker.count ;
+
+printf "\n*******************************\n"
+printf "*     Now running energy      *\n"
+printf "*******************************\n\n"
+$NUPACKHOME/bin/energy -material dna -multi jacs04_walker_basic_struct > output/jacs04_walker.energy ;
+
+printf "\n*******************************\n"
+printf "*      Now running prob       *\n"
+printf "*******************************\n\n"
+$NUPACKHOME/bin/prob -material dna -multi jacs04_walker_basic_struct > output/jacs04_walker.prob ;
+
+printf "\n*******************************\n"
+printf "*    Now running complexes    *\n"
+printf "*******************************\n\n"
+$NUPACKHOME/bin/complexes -material dna -ordered -pairs -mfe jacs04_walker ;
+
+printf "\n*******************************\n"
+printf "*  Now running concentrations *\n"
+printf "*******************************\n\n"
+$NUPACKHOME/bin/concentrations -ordered -pairs jacs04_walker ;
+
+printf "\n*******************************\n"
+printf "*  Now running distributions  *\n"
+printf "*******************************\n\n"
+$NUPACKHOME/bin/distributions -ordered -writestates jacs04_walker ;
+
+
+# Move files into output directory
+mv jacs04_walker_basic.ppairs output/jacs04_walker.ppairs ;
+mv jacs04_walker_basic.epairs output/jacs04_walker.epairs ;
+mv jacs04_walker_basic.mfe output/jacs04_walker.mfe ;
+mv jacs04_walker_basic_subopt.subopt output/jacs04_walker.subopt ;
+mv jacs04_walker.*cx* output/ ;
+mv jacs04_walker.eq output/ ;
+mv jacs04_walker.fpairs output/ ;
+mv jacs04_walker.dist output/ ;
+mv jacs04_walker.states output/ ;
+
+printf "\n*******************************\n"
+printf "*    Calculations complete    *\n"
+printf "*******************************\n\n"

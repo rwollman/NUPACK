@@ -1,0 +1,16 @@
+% NUPACK 3.0
+% Program: prob
+% Start time: Tue Feb  3 09:23:53 2015
+% Command: /Users/niles/Documents/research/nupack3.0.5c/bin/prob -pseudo jcc04_telomerase_struct 
+% Sequence:  GGGCUGUUUUUCUCGCUGACUUUCAGCCCCAAACAAAAAAUGUCAGCA
+% Structure: ((((((........{{{{{{...))))))............}}}}}}.
+% v(pi): 1
+% Parameters: RNA, 1995
+% Dangles setting: 1
+% Temperature (C): 37.0
+% Sodium concentration: 1.0000 M
+% Magnesium concentration: 0.0000 M
+% Pseudoknots enabled.
+%
+% Probability:
+3.325e-01

@@ -1,0 +1,16 @@
+% NUPACK 3.0
+% Program: pfunc
+% Start time: Tue Feb  3 09:30:06 2015
+% Command: /Users/niles/Documents/research/nupack3.0.5c/bin/pfunc -pseudo jcc04_telomerase 
+% Sequence:  GGGCUGUUUUUCUCGCUGACUUUCAGCCCCAAACAAAAAAUGUCAGCA
+% v(pi): 1
+% Parameters: RNA, 1995
+% Dangles setting: 1
+% Temperature (C): 37.0
+% Sodium concentration: 1.0000 M
+% Magnesium concentration: 0.0000 M
+% Pseudoknots enabled.
+%
+% Free energy (kcal/mol) and partition function:
+-1.72786076e+01
+1.49790521409472e+12

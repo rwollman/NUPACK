@@ -1,0 +1,342 @@
+This is the README file for the examples directory in the
+documentation for NUPACK 3.0
+
+There are four subdirectories:
+  designs
+  jacs04_walker
+  jcc04_telomerase
+  pnas04_hcr
+
+You can run all examples using the script "runall"
+and diff the results with reference output using the script "diffall". 
+Note that sequence designs in the "designs" directory may show differences
+from the reference output due to variations in random number generation
+using different computer hardware. 
+ 
+The designs subdirectory contains simple design specifications and 
+sample outputs from the design process.  The other subdirectories 
+contain a set of example sequences from papers published by the 
+Pierce Lab.  Their contents are described below, along with 
+suggested commands to run the executables on the examples.  In 
+order to run the executables, the environment variable 
+$NUPACKHOME must be properly set.
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %
+Directory: designs
+
+This directory contains the simple hairpin designs for the single
+complex design executable.
+
+Input files:
+  --hairpin.fold: Input file for use with the design executable
+
+  --hairpin_2.fold: A second input file for the design executable.
+
+  --hairpin.prevent: A file with patterns to prevent in the final design
+
+Suggested commands to run (representative of what is in the
+subdirectory output.ref):
+  design -T 23 -material dna hairpin
+
+  design -pairs -T 23 -material dna -prevent hairpin.prevent hairpin_2
+
+Files in subdirectory output.ref:
+
+  --Output of executable design (command 1):
+      hairpin.summary: The designed sequence and a summary of its properties
+
+  --Output of executable design (command 2):
+      hairpin_2.summary: The designed sequence and a summary of its properties
+      hairpin_2.ppairs: The pair probabilities of the designed sequence
+
+Shell script to run executables and generate output in directory
+output:
+  run_designs
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %
+Directory: jacs04_walker
+
+This directory contains the DNA sequences for the molecular walker of
+Shin and Pierce, J. Am. Chem. Soc., 126, 10834 (2004).  The two
+strands, called W1 and W2 in the paper, are half-complements of each
+other, the single-stranded regions being the "legs" of the walker.
+
+Input files:
+  --jacs04_walker_basic.in: Input file for use with executables
+      pfunc, pairs, mfe, and count.
+
+  --jacs04_walker_basic_struct.in: Input file for use with
+      executables energy and prob.
+
+  --jacs04_walker_basic_subopt.in: Input file for use with
+      executable subopt.
+
+  --jacs04_walker.in: Input file for use with executable complexes.
+
+  --jacs04_walker.con: Concentration input file for use with
+      executable concentrations.
+
+  --jacs04_walker.count: Strand population input file for use with
+      executable distributions.
+
+
+Suggested commands to run (representative of what is in the
+subdirectory output.ref):
+  pfunc -multi -material dna jacs04_walker_basic
+
+  pairs -multi -material dna jacs04_walker_basic
+
+  mfe -multi -material dna jacs04_walker_basic
+
+  subopt -multi -material dna jacs04_walker_basic_subopt
+
+  count -multi jacs04_walker_basic
+
+  energy -multi -material dna jacs04_walker_basic_struct
+
+  prob -multi -material dna jacs04_walker_basic_struct
+
+  complexes -material dna -ordered -pairs -mfe jacs04_walker
+
+  concentrations -ordered -pairs jacs04_walker
+
+  distributions -writestates jacs04_walker
+
+
+Files in subdirectory output.ref:
+  All files begin with "jacs04_walker", even if the original output
+  from the executable had additional characters such as "_struct" in
+  the file name.
+
+  --Output of executable pfunc:
+      jacs04_walker.pfunc (redirected from screen)
+
+  --Output of executable pairs:
+      jacs04_walker.epairs
+      jacs04_walker.ppairs
+
+  --Output of executable mfe:
+      jacs04_walker.mfe
+
+  --Output of executable subopt:
+      jacs04_walker.subopt
+
+  --Output of executable count:
+      jacs04_walker.count (redirected from screen)
+
+  --Output of executable energy:
+      jacs04_walker.energy (redirected from screen)
+
+  --Output of executable prob:
+      jacs04_walker.prob (redirected from screen)
+
+  --Output of executable complexes:
+      jacs04_walker.cx
+      jacs04_walker.ocx
+      jacs04_walker.ocx-key
+      jacs04_walker.cx-epairs
+      jacs04_walker.ocx-epairs
+      jacs04_walker.ocx-ppairs
+      jacs04_walker.ocx-mfe
+
+  --Output of executable concentrations:
+      jacs04_walker.eq
+      jacs04_walker.fpairs
+
+  --Output of executable distributions:
+      jacs04_walker.dist
+      jacs04_walker.states
+
+
+Shell script to run executables and generate output in directory
+output:
+  run_jacs04_walker
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %
+Directory: jcc04_telomerase
+
+This directory contains the RNA sequence for pseudoknotted human
+telomerase RNA, as presented in the paper Dirks and Pierce,
+J. Comput. Chem., 25, 1295 (2004).
+
+Input files:
+  --jcc04_telomerase_basic.in: Input file for use with executables
+      pfunc, pairs, mfe, and count.
+
+  --jcc04_telomerase_basic_struct.in: Input file for use with
+      executables energy and prob.
+
+  --jcc04_telomerase_basic_subopt.in: Input file for use with
+      executable subopt.
+
+  --jcc04_telomerase.in: Input file for use with executable complexes.
+
+  --jcc04_telomerase.list: Input file for use with executable complexes with
+      specific ordered complexes for which to compute partition function
+      information.
+
+  --jcc04_telomerase.con: Concentration input file for use with
+      executable concentrations.
+
+  --jcc04_telomerase.count: Strand population input file for use with
+      executable distributions.
+
+
+Suggested commands to run (representative of what is in the
+subdirectory output.ref):
+  pfunc -T 23 -pseudo jcc04_telomerase_basic
+
+  pairs -T 23 -pseudo jcc04_telomerase_basic
+
+  mfe -T 23 -pseudo jcc04_telomerase_basic
+
+  subopt -T 23 -pseudo jcc04_telomerase_basic_subopt
+
+  count -T 23 -multi jcc04_telomerase_basic
+
+  energy -T 23 -pseudo jcc04_telomerase_basic_struct
+
+  prob -T 23 -pseudo jcc04_telomerase_basic_struct
+
+
+
+Files in subdirectory output.ref:
+  All files begin with "jcc04_telomerase", even if the original output
+  from the executable had additional characters such as "_struct" in
+  the file name.
+
+  --Output of executable pfunc:
+      jcc04_telomerase.pfunc (redirected from screen)
+
+  --Output of executable pairs:
+      jcc04_telomerase.ppairs
+
+  --Output of executable mfe:
+      jcc04_telomerase.mfe
+
+  --Output of executable subopt:
+      jcc04_telomerase.subopt
+
+  --Output of executable count:
+      jcc04_telomerase.count (redirected from screen)
+
+  --Output of executable energy:
+      jcc04_telomerase.energy (redirected from screen)
+
+  --Output of executable prob:
+      jcc04_telomerase.prob (redirected from screen)
+
+Shell script to run executables and generate output in directory
+output:
+  run_jcc04_telomerase
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %
+Directory: pnas04_hcr
+
+This directory contains the DNA sequences for the basic hybridization
+chain reaction (HCR) system of Dirks and Pierce, Proc. Natl. Acad. 
+Sci., 101, 15275 (2004).  The strands in the input file are in order
+I, H1, H2, as named in the paper.
+
+Input files:
+  --pnas04_hcr_basic.in: Input file for use with executables
+      pfunc, pairs, mfe, and count.
+
+  --pnas04_hcr_basic_struct.in: Input file for use with
+      executables energy and prob.
+
+  --pnas04_hcr_basic_subopt.in: Input file for use with
+      executable subopt.
+
+  --pnas04_hcr.in: Input file for use with executable complexes.
+
+  --pnas04_hcr.list: Input file for use with executable complexes with
+      specific ordered complexes for which to compute partition function
+      information.
+
+  --pnas04_hcr.con: Concentration input file for use with
+      executable concentrations.
+
+  --pnas04_hcr.count: Strand population input file for use with
+      executable distributions.
+
+
+Suggested commands to run (representative of what is in the
+subdirectory output.ref):
+  pfunc -T 23 -multi -material dna pnas04_hcr_basic
+
+  pairs -T 23 -multi -material dna pnas04_hcr_basic
+
+  mfe -T 23 -multi -material dna pnas04_hcr_basic
+
+  subopt -T 23 -multi -material dna pnas04_hcr_basic_subopt
+
+  count -T 23 -multi pnas04_hcr_basic
+
+  energy -T 23 -multi -material dna pnas04_hcr_basic_struct
+
+  prob -T 23 -multi -material dna pnas04_hcr_basic_struct
+
+  complexes -T 23 -material dna -ordered -pairs -mfe pnas04_hcr
+
+  concentrations -ordered -pairs pnas04_hcr
+
+  distributions -writestates pnas04_hcr
+
+
+Files in subdirectory output.ref:
+  All files begin with "pnas04_hcr", even if the original output
+  from the executable had additional characters such as "_struct" in
+  the file name.
+
+  --Output of executable pfunc:
+      pnas04_hcr.pfunc (redirected from screen)
+
+  --Output of executable pairs:
+      pnas04_hcr.epairs
+      pnas04_hcr.ppairs
+
+  --Output of executable mfe:
+      pnas04_hcr.mfe
+
+  --Output of executable subopt:
+      pnas04_hcr.subopt
+
+  --Output of executable count:
+      pnas04_hcr.count (redirected from screen)
+
+  --Output of executable energy:
+      pnas04_hcr.energy (redirected from screen)
+
+  --Output of executable prob:
+      pnas04_hcr.prob (redirected from screen)
+
+  --Output of executable complexes:
+      pnas04_hcr.cx
+      pnas04_hcr.ocx
+      pnas04_hcr.ocx-key
+      pnas04_hcr.cx-epairs
+      pnas04_hcr.ocx-epairs
+      pnas04_hcr.ocx-ppairs
+      pnas04_hcr.ocx-mfe
+
+  --Output of executable concentrations:
+      pnas04_hcr.eq
+      pnas04_hcr.fpairs
+
+  --Output of executable distributions:
+      pnas04_hcr.dist
+      pnas04_hcr.states
+
+
+Shell script to run executables and generate output in directory
+output:
+  run_pnas04_hcr
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %
+

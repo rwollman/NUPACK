@@ -1,0 +1,37 @@
+#!/bin/bash
+#
+# diff the files in directories $OUT1 and $OUT2 for all examples
+# 
+# output should match except for dates
+#
+# Niles A. Pierce (27 January 2015)
+#
+
+OUT1="output"
+OUT2="output.ref"
+
+
+printf "\n*********************************************************** \n"
+printf   "diff files in $OUT1 and $OUT2                               \n"
+printf   "*********************************************************** \n"
+
+printf "\n*********************************************************** \n"
+printf   "designs                                                     \n"
+printf   "*********************************************************** \n"
+diff -r ./designs/$OUT1 ./designs/$OUT2
+
+printf "\n*********************************************************** \n"
+printf   "jacs04_walker                                               \n"
+printf   "*********************************************************** \n"
+diff -r ./jacs04_walker/$OUT1 ./jacs04_walker/$OUT2
+
+printf "\n*********************************************************** \n"
+printf   "jcc04_telomerase                                            \n"
+printf   "*********************************************************** \n"
+diff -r ./jcc04_telomerase/$OUT1 ./jcc04_telomerase/$OUT2
+
+printf "\n*********************************************************** \n"
+printf   "pnas04_hcr                                                  \n"
+printf   "*********************************************************** \n"
+diff -r ./pnas04_hcr/$OUT1 ./pnas04_hcr/$OUT2
+

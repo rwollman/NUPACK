@@ -1,0 +1,160 @@
+This is the help file for Concentrations, a program that does
+thermodynamic analysis of interacting nucleic acid strands in a box
+where the partition functions for the complexes are known.  The
+algorithm is described in Dirks, Bois, Schaeffer, Winfree, and Pierce,
+"Thermodynamic Analysis of interacting nucleic acid strands", SIAM
+Review, 2006, in press.  Variable names in the code and in this help
+file should be referenced with variable names in that paper.
+
+The program calculates the equilibrium concentrations of possible
+complexes in the thermodynamic limit, i.e., for a large system with
+many strands.  The trust region algorithm for solving the dual problem
+is that in Nocedal and Wright, Numerical Optimization, 1999, page 68,
+with the dogleg method on page 71.  (There are some modifications to
+this algorithm in the actual implementation.  See the comments in
+CalcConc.c for details.)
+
+
+USAGE: 
+  concentrations [-flags] prefix[.suffix]
+
+  "prefix" is the prefix to the input files.  See below for further
+  description.  The .suffix can be included, but the suffix must be
+  one of the following:
+     cx
+     ocx
+     cx-epairs
+     ocx-epairs
+     ocx-ppairs
+     cx-mfe
+     ocx-mfe
+  If no suffix is given, a suffix of .cx is assumed.
+
+  The available flags are:
+  -sort [required argument]
+     sort = 0: the output is not sorted, but listed in the
+       order in which it was inputted.
+     sort = 1 (default): the output is sorted first by permutation 
+       (or complex if there are no permutations) concentration.
+     sort = 2: the output is sorted first by complex ID number and then
+       by permutation ID number.
+     sort = 3: the output is sorted first by complex concentration.  The 
+       permutations within each complex are then sorted by their
+       concentrations.
+     sort = 4: the output is sorted first by size of complexes and then 
+       lexicographically within each complex size.  I.e., say there are 
+       two strands, 1, and 2.  The ordering for complex size 2 is 1 1, 
+       1 2, 2 2.  The permutations are sorted within each complex by 
+       permutation ID number.
+  -T [required argument] 
+     The temperature, in degrees C, at which the calculation will be
+     done.  Note that the partition functions used in the calculation
+     should be calculated at the same temperature.  The default is T =
+     37.  The command line temperature overrides all other options.
+  -quiet [no argument]
+     Selecting this flag will supress output to the screen.
+  -writelogfile [no argument]
+     Selecting this flag will produce a log file detailing the trust
+     region calculation.
+  -maxiters [required argument]
+     The maximum number of iterations allowed in the trust region
+     minimization algorithm.  Default is maxiters = 1000.
+  -tol [required argument]
+     The tolerance for converging to the equilibrium concentrations.
+     This is entered as a fraction of the input concentration of the 
+     single-stranded species.  I.e., if we have two strands A and B 
+     that form complexes, and the input concentration of A is 1e-6 
+     molar and B is 2e-6 molar, a value of tol = 0.001 means that 
+     the maximal error in the conservation of mass for strand A is 
+     0.001*1e-6 molar and 0.001*2e-6 for strand B.  The default value 
+     is tol = 0.0000001.
+  -maxtrial [required argument]
+     The maximum number of initial conditions to try before stopping.
+     The default is maxtrial = 100.  Not relevant for method = 2.
+  -maxnostep [required argument]
+     The maximum number of iterations in the trust region optimization
+     that may be tried without a step being taken.  This corresponds
+     to a very small trust region due to precision issues.  If
+     maxnostep is exceeded, a new initial condition is tried.  The
+     default is maxnostep = 50.  Not relevant for method = 2.
+  -perturbscale [required argument]
+     When new initial conditions are generated, they are perturbed
+     from the standard initial condition by a prefactor multiplied
+     by a random number from -1 to 1.  This prefactor is perturbscale.
+     Its value is adjusted in the program in order to make sure there
+     are no overflow errors.  The default is perturbscale = 100.  Not
+     relevant for method = 2.
+  -help [no argument]
+     Prints this help file to the screen.
+
+
+  There are two input files, prefix.con, and one of the following:
+    prefix.cx
+    prefix.ocx
+    prefix.cx-epairs
+    prefix.ocx-epairs
+    prefix.ocx-ppairs
+    prefix.cx-mfe
+    prefix.ocx-mfe
+
+  prefix.con has the following:
+      Each line of the file contains the total concentration 
+      IN MOLAR of each strand.  There are therefore K lines in 
+      this file, where K is the number of single-species there 
+      are in the system.  The concentration may be in scientific
+      notation (e.g. 1e-6 for micromolar).  A sample file is in 
+      Sample.con.
+
+  The other input file contains the following:
+      Each row represents a permutation of a complex.  The first column 
+      is the complex ID number.  THE COMPLEX ID NUMBERS IN THE INPUT
+      FILE MUST GO FROM 1 TO THE TOTAL NUMBER OF COMPLEXES AND NOT
+      REPEAT ANY NUMBERS.  If the suffix for the file begins with "ocx",
+      the second column contains the ordered complex identifier.  If
+      the suffix begins with "cx", this column is omitted.  For all
+      formats, the next $|\Psi^0|$ entries in a row j of are the 
+      entries in column j of the matrix A.  The last entry in a row 
+      contains the free energy of the complex IN UNITS OF KCAL/MOL.  
+      This is $-kT \log Q_j$ (with kT [=] kcal/mol).  Subsequent columns 
+      may contain pertinent data for convenience (such as an MFE structure,
+      as is the case for prefix.cx-mfe and prefix.ocx-mfe), but are not 
+      used in this program.  A sample input file is found in Sample.ocx.
+
+
+  The output files are:
+      prefix.eq:
+	Column 1: Complex ID number
+	Column 2: Permutation ID number (if .ocx input, otherwise omitted)
+	Column 3 to K+3: Transpose of column of A corresponding to 
+	                 the complex.
+	Column K+4: Free energy of complex (as supplied by input file)
+	            IN KCAL/MOL.
+	Column K+5: Concentration of complex IN MOLAR.
+      prefix.log (only if -writelogfile flag is used):
+	This file contains information about the calculation.  It
+	includes the command used to execute the calculation, the time
+	the calculation was run, the trust region parameters, what the
+	input and output files are, etc. The free energy of the
+        solution in KCAL/LITER OF SOLUTION is also outputted.  The
+        reference state is a state where all strands are present but
+        free of base pairs, as in the Dirks, et al., paper.
+    Also, if the -quiet flag is not chosen, the following information 
+    will is written to the screen:
+      *The error in conservation of mass for each single-species in 
+       units of MOLAR.
+      *The free energy of the solution in KCAL/LITER OF SOLUTION.  The
+       reference state is a state where all strands are present but
+       free of base pairs, as in the Dirks, et al. paper.
+      *The elapsed time of the calculation.
+
+KNOWN WATCHOUT: 
+--There is currently little checking of the input files.  If they are
+  not formatted properly and/or don't match the necessary format for
+  the given choice of method, you will get a seg fault or strange
+  results.  In particular, make sure that the con file is correct
+  and check all units!  Concentrations are in MOLAR and free energies
+  are in KCAL/MOL.
+
+
+Justin Bois, Caltech, 2 September 2006
+bois@caltech.edu

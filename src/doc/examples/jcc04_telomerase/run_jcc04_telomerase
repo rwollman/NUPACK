@@ -1,0 +1,54 @@
+#
+# This is a shell script to run the executables of NUPACK on
+# the example jcc04_telomerase.
+#
+# Uses RNA (mfold v2.3) parameter sets.  Pseudoknots are considered.
+# T = 37 C.  This is a single-strand calculation.
+#
+#  Justin Bois, 13 January, 2007
+
+# Run programs
+printf "\n*******************************\n"
+printf "*      Now running pfunc      *\n"
+printf "*******************************\n\n"
+$NUPACKHOME/bin/pfunc -pseudo jcc04_telomerase > output/jcc04_telomerase.pfunc ;
+
+printf "\n*******************************\n"
+printf "*      Now running pairs      *\n"
+printf "*******************************\n\n"
+$NUPACKHOME/bin/pairs -pseudo jcc04_telomerase ;
+
+printf "\n*******************************\n"
+printf "*       Now running mfe       *\n"
+printf "*******************************\n\n"
+$NUPACKHOME/bin/mfe -pseudo jcc04_telomerase ;
+
+printf "\n*******************************\n"
+printf "*     Now running subopt      *\n"
+printf "*******************************\n\n"
+$NUPACKHOME/bin/subopt -pseudo jcc04_telomerase_subopt ;
+
+printf "\n*******************************\n"
+printf "*      Now running count      *\n"
+printf "*******************************\n\n"
+$NUPACKHOME/bin/count -pseudo jcc04_telomerase > output/jcc04_telomerase.count ;
+
+printf "\n*******************************\n"
+printf "*     Now running energy      *\n"
+printf "*******************************\n\n"
+$NUPACKHOME/bin/energy -pseudo jcc04_telomerase_struct > output/jcc04_telomerase.energy ;
+
+printf "\n*******************************\n"
+printf "*      Now running prob       *\n"
+printf "*******************************\n\n"
+$NUPACKHOME/bin/prob -pseudo jcc04_telomerase_struct > output/jcc04_telomerase.prob ;
+
+
+# Move files into output directory
+mv jcc04_telomerase.ppairs output/jcc04_telomerase.ppairs ;
+mv jcc04_telomerase.mfe output/jcc04_telomerase.mfe ;
+mv jcc04_telomerase_subopt.subopt output/jcc04_telomerase.subopt ;
+
+printf "\n*******************************\n"
+printf "*    Calculations complete    *\n"
+printf "*******************************\n\n"

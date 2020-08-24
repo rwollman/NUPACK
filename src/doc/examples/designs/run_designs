@@ -1,0 +1,29 @@
+#
+# This is a shell script to run the executables of NUPACK 3.0 on
+# the example jacs04_walker.
+#
+# Uses DNA parameter sets.  All complexes are multistranded.
+# T = 37 C.
+#
+
+# Run programs
+printf "\n*******************************\n"
+printf "*     Now running design      *\n"
+printf "*******************************\n\n"
+$NUPACKHOME/bin/design -material dna -loadseed hairpin;
+
+mv hairpin.summary output/hairpin.summary
+
+printf "\n*******************************\n"
+printf "*     Now running design with *\n"
+printf "*     pattern prevention      *\n"
+printf "*******************************\n\n"
+$NUPACKHOME/bin/design -pairs -material dna -prevent hairpin.prevent -loadseed hairpin_2;
+
+# Move files into output_files directory
+mv hairpin_2.summary output/hairpin_2.summary;
+mv hairpin_2.ppairs output/hairpin_2.ppairs;
+
+printf "\n*******************************\n"
+printf "*    Designs complete         *\n"
+printf "*******************************\n\n"
