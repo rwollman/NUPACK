@@ -1,0 +1,24 @@
+#
+# This script runs a NUPACK executable to perform complex design
+# for a bipedal walker described in Shin and Pierce, J Am Chem Soc, 2004
+# 
+# Complex is a dimer, material is DNA, temperature is 37C 
+#
+# Justin Bois  (13 January 2007)
+# Niles Pierce (11 October 2014) 
+#
+printf "************************************************** \n"
+printf "run jobs for complex-design: simple examples       \n"
+printf "************************************************** \n"
+
+printf   "* Reading files from input directory \n"
+
+printf   "* Running: complexdefect \n"
+complexdefect -material dna -multi input/walker-defect > output/walker-defect.out ;
+
+printf   "* Running: complexdesign \n"
+complexdesign -material dna -pairs -loadseed input/walker-design > /dev/null ;
+
+mv input/walker-design.summary output/ ;
+mv input/walker-design.ppairs output/ ;
+printf   "* See results in output directory\n\n"

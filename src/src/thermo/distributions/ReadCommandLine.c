@@ -12,20 +12,21 @@
   bois@caltech.edu
 */
 
+#include "ReadCommandLine.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <limits.h>
 #include <getopt.h> // Takes options from the command line
-#include "DistributionsHeaderFile.h" // File with constants and function prototypes
 
+#include "constants.h"
 
 /* ******************************************************************************** */
 void ReadCommandLine(int nargs, char **args, char *cxFile, char *countFile, 
                      char *logFile, char *distFile, char *LambdaFile, 
                      int *SortOutput, int *WriteLambda, double *MaxSizeLambda,
                      double *kT, int *quiet, int *WriteLogFile, int *Toverride,
-                     int *NoPermID,int *NUPACK_VALIDATE) {
+                     int *NoPermID, int *NUPACK_VALIDATE, int *v3) {
 
   int options;  // Counters used in getting flags
   int ShowHelp; // ShowHelp = 1 if help option flag is selected
@@ -39,7 +40,7 @@ void ReadCommandLine(int nargs, char **args, char *cxFile, char *countFile,
     exit(ERR_NOINPUT);
   }
 
-  *NoPermID = 1; // Default is to use .cx file
+  *NoPermID = 0; // Default is to use .ocx file
   *SortOutput = 1;  // Default is to sort the output by concentration of complexes
   *WriteLogFile = 0; // Default is not to write log file
   *WriteLambda = 0; // Default is not to write out Lambda
@@ -49,21 +50,28 @@ void ReadCommandLine(int nargs, char **args, char *cxFile, char *countFile,
   *Toverride = 0; // Default is to either use T = 37 or that specified in input file
   *NUPACK_VALIDATE = 0;
   ShowHelp = 0;
+
+  /* version 3 output */
+  *v3 = 0;
+  int prev_ordered = 1; // used to keep -ordered off if not specified before -v3
+
+  SetExecutionPath(nargs, args);
   
   // Get the option flags
   while (1)
     {
       static struct option long_options [] =
       {
-        {"sort", required_argument,        0, 'a'},
-        {"T", required_argument,           0, 'b'},
-        {"maxstates",required_argument,    0, 'c'},
-        {"quiet", no_argument,             0, 'd'},
-        {"help", no_argument,              0, 'e'},
-        {"writestates", no_argument,       0, 'f'},
-        {"writelogfile", no_argument,      0, 'g'},
-        {"ordered",      no_argument,      0, 'h'},
-        {"validate", no_argument,   0, 'i'},
+        {"sort",          required_argument,  0, 'a'},
+        {"T",             required_argument,  0, 'b'},
+        {"maxstates",     required_argument,  0, 'c'},
+        {"quiet",         no_argument,        0, 'd'},
+        {"help",          no_argument,        0, 'e'},
+        {"writestates",   no_argument,        0, 'f'},
+        {"writelogfile",  no_argument,        0, 'g'},
+        {"ordered",       no_argument,        0, 'h'},
+        {"validate",      no_argument,        0, 'i'},
+        {"v3.0",          no_argument,        0, 'z'},
         {0, 0, 0, 0}
       };
       /* getopt_long stores the option index here. */
@@ -79,45 +87,51 @@ void ReadCommandLine(int nargs, char **args, char *cxFile, char *countFile,
       switch (options)
         {
         case 'a':
-	  strcpy(InputStr,optarg);
-	  *SortOutput = atoi(InputStr);
+	        strcpy(InputStr,optarg);
+	        *SortOutput = atoi(InputStr);
           break;
 
-	case 'b':
-	  strcpy(InputStr,optarg);
-	  *kT = kB*(str2double(InputStr) + ZERO_C_IN_KELVIN);
-	  *Toverride = 1;
-	  break;
+	      case 'b':
+	        strcpy(InputStr,optarg);
+	        *kT = kB*(str2double(InputStr) + ZERO_C_IN_KELVIN);
+	        *Toverride = 1;
+	        break;
 
         case 'c':
-	  strcpy(InputStr,optarg);
-	  (*MaxSizeLambda) = str2double(InputStr);
+	        strcpy(InputStr,optarg);
+	        (*MaxSizeLambda) = str2double(InputStr);
           break;
 
-	case 'd':
-	  *quiet = 1;
-	  break;
+	      case 'd':
+	        *quiet = 1;
+	        break;
 
-	case 'e':
-	  ShowHelp = 1;
-	  break;
+	      case 'e':
+	        ShowHelp = 1;
+	        break;
 
-	case 'f':
-	  *WriteLambda = 1;
-	  break;
+	      case 'f':
+	        *WriteLambda = 1;
+	        break;
 
-	case 'g':
-	  *WriteLogFile = 1;
-	  break;
+	      case 'g':
+	        *WriteLogFile = 1;
+	        break;
 
-	case 'h':
-	  *NoPermID = 0;
-	  break;
+	      case 'h':
+	        *NoPermID = 0;
+          prev_ordered = 0;
+	        break;
 
-  case 'i':
-    *NUPACK_VALIDATE = 1;
-    *SortOutput = 3;
-    break;
+        case 'i':
+          *NUPACK_VALIDATE = 1;
+          *SortOutput = 3;
+          break;
+
+        case 'z':
+          *v3 = 1;
+          *NoPermID = prev_ordered;
+          break;
 
         case '?':
           // getopt_long already printed an error message.
@@ -128,8 +142,13 @@ void ReadCommandLine(int nargs, char **args, char *cxFile, char *countFile,
         }
     }
 
+  /* version 3 output */
+  if (!*quiet) {
+    print_deprecation_info(stdout);
+  }
+
   if (ShowHelp) {
-    DisplayHelp(1);
+    DisplayDistributionsHelp(1);
     exit(ERR_HELP);
   }
 
@@ -201,7 +220,7 @@ void ReadCommandLine(int nargs, char **args, char *cxFile, char *countFile,
 
 
 /* ******************************************************************************** */
-void DisplayHelp(int DummyArgument) {
+void DisplayDistributionsHelp(int DummyArgument) {
   /*
     Displays the contents of the Distributions help file.
   */
@@ -262,5 +281,16 @@ void DisplayHelp(int DummyArgument) {
 
   fclose(fp);
   */
+}
+/* ******************************************************************************** */
+void print_deprecation_info(FILE *out) {
+  char *dep_mess = 
+  "Relative to NUPACK 3.0, the following change was introduced to the\n"
+  "distributions executable: the -ordered option is on by default.\n"
+  "Use the -v3.0 option to revert to NUPACK 3.0 behavior.\n\n";
+
+  fprintf(out, "%s", dep_mess);
+  
+  return;
 }
 /* ******************************************************************************** */

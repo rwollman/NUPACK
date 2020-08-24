@@ -22,9 +22,12 @@
 #include <time.h>
 #include <sys/stat.h>
 
-#include"complexesHeader.h"
+#include <thermo/core.h>
 
-
+#include "complexesStructs.h"
+#include "complexesUtils.h"
+#include "permBG.h"
+#include "ReadCommandLine.h"
 
 //Global variables
 extern int nStrands;
@@ -53,7 +56,7 @@ int main( int argc, char **argv) {
 
   int maxComplexSize=0;
   int maxListComplexSize=0;
-  int complexSize=0;
+  int complexSize;
   int nMonomer;
 
   int nNewComplexes;
@@ -74,11 +77,11 @@ int main( int argc, char **argv) {
   int status;
 
   int seqCode;
-  FILE *F_cx = NULL, *F_ocx = NULL,
+  FILE *F_cx = NULL, *F_ocx = NULL, // *.cx, only output with -v3
   *F_list = NULL, *F_perm = NULL,
   *F_permPr=NULL,
   //*F_permAvgP=NULL,
-  *F_cxAvg=NULL,
+  *F_cxAvg=NULL, // *.cx-epairs, only output with -v3
   //*F_cxAvgP=NULL,
   *F_permMfe = NULL,
   //*F_cxMfe = NULL,
@@ -144,7 +147,7 @@ int main( int argc, char **argv) {
 
   // Set defaults of global args
   globalArgs.quiet = 0;
-  globalArgs.permsOn = 0;
+  globalArgs.permsOn = 1;
   globalArgs.dopairs = 0;
   globalArgs.T = 37.0;
   globalArgs.dangles = 1;
@@ -164,14 +167,18 @@ int main( int argc, char **argv) {
   globalArgs.dodefect = 0;
   strcpy( globalArgs.inputFilePrefix, "NoInputFile");
 
-  inputFileSpecified = ReadCommandLine( argc, argv);
+  /* version 3 output */
+  globalArgs.v3 = 0;
 
-  if(globalArgs.dodefect == 1) {
+  inputFileSpecified = ReadCommandLine( argc, argv);
+  
+
+  if (globalArgs.dodefect == 1) {
     globalArgs.mfe = 1;
     globalArgs.permsOn = 1;
     globalArgs.dopairs = 1;
   }
-  if( globalArgs.mfe == 1 && globalArgs.permsOn == 0) {
+  if (globalArgs.mfe == 1 && globalArgs.permsOn == 0) {
     if( !globalArgs.quiet) {
       printf("Warning, including -mfe requires -ordered. ");
       printf("As a result, -ordered has been enabled.\n");
@@ -200,23 +207,40 @@ int main( int argc, char **argv) {
   }
 
   TEMP_K = globalArgs.T + ZERO_C_IN_KELVIN;
+  
+  /* version 3 output */
+  if(globalArgs.v3) {
+    sprintf( cxName, "%s.cx", filePrefix);
+    sprintf( cxAvgName, "%s.cx-epairs", filePrefix);
+  }
 
-  sprintf( cxName, "%s.cx", filePrefix);
   sprintf( ocxName, "%s.ocx", filePrefix);
   sprintf( listName, "%s.list", filePrefix);
   sprintf( permName, "%s.ocx-key", filePrefix);
   sprintf( permPrName, "%s.ocx-ppairs", filePrefix);
-  sprintf( cxAvgName, "%s.cx-epairs", filePrefix);
   sprintf( permMfeName, "%s.ocx-mfe", filePrefix);
   sprintf( permAvgName, "%s.ocx-epairs", filePrefix);
   sprintf( progName, "%s.prog", filePrefix);
   sprintf( defectName, "%s.ocx-defect", filePrefix);
-
+  
+  /* version 3 output */
+  char *composition = NULL;
+  char *ordering = NULL;
+  if (globalArgs.v3) {
+    composition = "complex";
+    ordering = "order";
+  }
+  else {
+    composition = "composition";
+    ordering = "ordering";
+  }
 
   if( globalArgs.out == 1) {
-    F_cx = fopen( cxName, "w");
-    if( !F_cx) printf("Error: Unable to create %s\n", cxName);
-
+    /* version 3 output */
+    if(globalArgs.v3) {
+      F_cx = fopen( cxName, "w");
+      if( !F_cx) printf("Error: Unable to create %s\n", cxName);
+    }
 
     if( globalArgs.mfe) {
       F_permMfe = fopen( permMfeName, "w");
@@ -225,8 +249,11 @@ int main( int argc, char **argv) {
     }
 
     if( globalArgs.dopairs) {
-      F_cxAvg = fopen( cxAvgName, "w");
-      if( !F_cxAvg) printf("Error: Unable to create %s\n", cxAvgName);
+      /* version 3 output */
+      if(globalArgs.v3) {
+        F_cxAvg = fopen( cxAvgName, "w");
+        if( !F_cxAvg) printf("Error: Unable to create %s\n", cxAvgName);
+      }
 
       if( globalArgs.permsOn) {
         F_permPr = fopen( permPrName, "w");
@@ -403,39 +430,46 @@ int main( int argc, char **argv) {
   totalSets = nSets + nNewComplexes;
 
   if( globalArgs.out == 1) {
-    printHeader( nStrands, seqs, maxComplexSize, nTotalOrders,
-                nSets, nNewComplexes, F_cx, argc, argv, 0);
+    
+    /* version 3 output */
+    if(globalArgs.v3) {
+      printHeader( nStrands, seqs, maxComplexSize, nTotalOrders,
+                  nNewPerms, nSets, nNewComplexes, F_cx, argc, argv, 0);
+    }
     if( globalArgs.permsOn) {
       printHeader( nStrands, seqs, maxComplexSize, nTotalOrders,
-                  nSets, nNewComplexes, F_ocx, argc, argv, 0);
+                  nNewPerms, nSets, nNewComplexes, F_ocx, argc, argv, 0);
       printHeader( nStrands, seqs, maxComplexSize, nTotalOrders,
-                  nSets,
+                  nNewPerms, nSets,
                   nNewComplexes, F_perm, argc, argv, 0);
     }
 
     if( globalArgs.mfe) {
       printHeader( nStrands, seqs, maxComplexSize,
-                  nTotalOrders, nSets,
+                  nTotalOrders, nNewPerms, nSets,
                   nNewComplexes, F_permMfe, argc, argv, 0);
     }
 
     if( globalArgs.dopairs) {
-      printHeader( nStrands, seqs, maxComplexSize, nTotalOrders,
-                  nSets,
-                  nNewComplexes, F_cxAvg, argc, argv, 1);
+      /* version 3 output */
+      if(globalArgs.v3) {
+        printHeader( nStrands, seqs, maxComplexSize, nTotalOrders,
+                    nNewPerms, nSets,
+                    nNewComplexes, F_cxAvg, argc, argv, 1);
+      }
       if( globalArgs.permsOn) {
         printHeader( nStrands, seqs, maxComplexSize, nTotalOrders,
-                    nSets,
+                    nNewPerms, nSets,
                     nNewComplexes, F_permPr, argc, argv, 1);
         printHeader( nStrands, seqs, maxComplexSize, nTotalOrders,
-                    nSets,
+                    nNewPerms, nSets,
                     nNewComplexes, F_permAvg, argc, argv, 1);
 
       }
     }
     if(globalArgs.dodefect) {
       printHeader(nStrands, seqs, maxComplexSize, nTotalOrders,
-                  nSets, nNewComplexes, F_defect, argc, argv, 1);
+                  nNewPerms, nSets, nNewComplexes, F_defect, argc, argv, 1);
       fprintf(F_defect,"%%\n");
       fprintf(F_defect,"%% Ensemble defects n(s,phi) and normalized ensemble defects n(s,phi)/N\n");
       fprintf(F_defect,"%% Comp\tPerm\t");
@@ -511,12 +545,12 @@ int main( int argc, char **argv) {
         CLastLine = 1;
         continue;
       }
-
+      
       if(0 == sscanf(token, "%d", &curStrand)) {
         fprintf(stderr,"Error on line %d: encountered %s\n",list_file_line,token);
         exit(1);
       }
-
+      
       curNumStrands = 0;
       while(NULL != token) {
         if(0 == sscanf(token, "%d", &curStrand)) {
@@ -526,7 +560,7 @@ int main( int argc, char **argv) {
         curNumStrands++;
         token = strtok(NULL, " ,\t\n");
       }
-
+      
       allPermutations[offset].nSeqs = curNumStrands;
       allPermutations[offset].code = (int *) malloc(curNumStrands * sizeof(int));
       allPermutations[offset].strand_sums = (int *) malloc(nStrands * sizeof(int));
@@ -772,8 +806,8 @@ int main( int argc, char **argv) {
             }
             fprintf(F_permMfe," %%\n");
 
-            // Print the record number
-            fprintf(F_permMfe,"%% complex%d-order%d\n",lastCxId,permId);
+            // Print the record number /* version 3 output */
+            fprintf(F_permMfe,"%% %s%d-%s%d\n",composition,lastCxId,ordering,permId);
 
             // Print the total strand length
             fprintf(F_permMfe,"%d\n",allSets[i].totalLength);
@@ -793,9 +827,9 @@ int main( int argc, char **argv) {
             fprintf(F_permPr," %%\n");
             fprintf(F_permAvg," %%\n");
 
-            // Print the record number
-            fprintf(F_permPr,"%% complex%d-order%d\n",lastCxId,permId);
-            fprintf(F_permAvg,"%% complex%d-order%d\n",lastCxId,permId);
+            // Print the record number /* version 3 output */
+            fprintf(F_permPr,"%% %s%d-%s%d\n",composition,lastCxId,ordering,permId);
+            fprintf(F_permAvg,"%% %s%d-%s%d\n",composition,lastCxId,ordering,permId);
 
             // Print the total strand length
             fprintf(F_permPr,"%d\n",allSets[i].totalLength);
@@ -973,8 +1007,9 @@ int main( int argc, char **argv) {
       }
 
 
+      /* version 3 output */
       //print to .cx on the fly
-      if( globalArgs.out == 1) {
+      if(globalArgs.v3 && globalArgs.out == 1) {
         if( allSets[i].pf <= 0) {
           fprintf( F_cx, "%% ");
         }
@@ -998,7 +1033,8 @@ int main( int argc, char **argv) {
         fprintf( F_cx, "\n");
       }
 
-      if( globalArgs.out == 1 && globalArgs.dopairs) {
+      /* version 3 output */
+      if(globalArgs.v3 && globalArgs.out == 1 && globalArgs.dopairs) {
 
         // Row of percent signs for separation
         fprintf(F_cxAvg,"\n%% ");
@@ -1034,11 +1070,14 @@ int main( int argc, char **argv) {
           cxAvgPairs[ q ] /= allSets[i].pf;
           row = (q / totalStrandsLength)+1; //1 to totalStrandsLength
           column = (q % totalStrandsLength)+1; //1 to totalStrandsLength
-          if( cxAvgPairs[q] >= globalArgs.cutoff && row < column ) {
-            if(!NUPACK_VALIDATE) {
-              fprintf( F_cxAvg, "%d\t%d\t%.3Le\n", row, column, cxAvgPairs[q]);
-            } else {
-              fprintf( F_cxAvg, "%d\t%d\t%.14Le\n", row, column, cxAvgPairs[q]);
+          /* version 3 output */
+          if(globalArgs.v3) {
+            if( cxAvgPairs[q] >= globalArgs.cutoff && row < column ) {
+              if(!NUPACK_VALIDATE) {
+                fprintf( F_cxAvg, "%d\t%d\t%.3Le\n", row, column, cxAvgPairs[q]);
+              } else {
+                fprintf( F_cxAvg, "%d\t%d\t%.14Le\n", row, column, cxAvgPairs[q]);
+              }
             }
           }
         }
@@ -1053,21 +1092,27 @@ int main( int argc, char **argv) {
             row = indexCx[q][r] + 1;
             column = totalStrandsLength + 1;
             expectedUnpaired = allSets[i].code[q] - allSets[i].avgBp[q][r];
-            if( expectedUnpaired >= globalArgs.cutoff) {
-              if(!NUPACK_VALIDATE) {
-                fprintf( F_cxAvg, "%d\t%d\t%.3Le\n", row, column, expectedUnpaired);
-              } else {
-                fprintf( F_cxAvg, "%d\t%d\t%.14Le\n", row, column, expectedUnpaired);
+            /* version 3 output */
+            if(globalArgs.v3) {
+              if( expectedUnpaired >= globalArgs.cutoff) {
+                if(!NUPACK_VALIDATE) {
+                  fprintf( F_cxAvg, "%d\t%d\t%.3Le\n", row, column, expectedUnpaired);
+                } else {
+                  fprintf( F_cxAvg, "%d\t%d\t%.14Le\n", row, column, expectedUnpaired);
+                }
               }
             }
           }
         }
+        /* version 3 output */
         // Row of percent signs for separation
-        fprintf(F_cxAvg,"%% ");
-        for (l = 0; l < nPercent; l++) {
-          fprintf(F_cxAvg,"%%");
+        if(globalArgs.v3) {
+          fprintf(F_cxAvg,"%% ");
+          for (l = 0; l < nPercent; l++) {
+            fprintf(F_cxAvg,"%%");
+          }
+          fprintf(F_cxAvg," %%\n");
         }
-        fprintf(F_cxAvg," %%\n");
       }
 
       // Assess progress and write to a file
@@ -1133,7 +1178,10 @@ int main( int argc, char **argv) {
   }
 
   if( globalArgs.out == 1) {
-    fclose( F_cx);
+    /* version 3 output */
+    if(globalArgs.v3) {
+      fclose( F_cx);
+    }
     if( globalArgs.mfe) {
       fclose( F_permMfe);
     }
@@ -1142,7 +1190,10 @@ int main( int argc, char **argv) {
       fclose( F_ocx);
     }
     if( globalArgs.dopairs) {
-      fclose( F_cxAvg);
+      /* version 3 output */
+      if(globalArgs.v3) {
+        fclose( F_cxAvg);
+      }
       if( globalArgs.permsOn) {
         fclose( F_permPr);
         fclose( F_permAvg);

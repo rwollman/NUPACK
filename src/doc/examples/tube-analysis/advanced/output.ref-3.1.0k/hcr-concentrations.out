@@ -1,0 +1,11 @@
+Relative to NUPACK 3.0, the following change was introduced to the
+concentrations executable: the -ordered option is on by default.
+Use the -v3.0 option to revert to NUPACK 3.0 behavior.
+
+Error in conservation of mass:
+   2.326782e-20 Molar
+   4.763490e-20 Molar
+   3.627581e-20 Molar
+
+Free energy = -6.049972e-05 kcal/litre of solution
+Elapsed time: 0 seconds.

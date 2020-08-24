@@ -15,8 +15,8 @@
 #include <time.h>
 #include <string.h>
 
-#include "pfuncUtilsHeader.h"
-#include "DNAExternals.h"
+#include <shared.h>
+#include <thermo/core.h>
 
 
 /* ************************************************ */
@@ -111,6 +111,9 @@ int main( int argc, char *argv[] ) {
 
   tmpLength = length = strlen( seqChar);
   convertSeq(seqChar, seqNum, tmpLength);
+  int ns1,ns2;
+  getSequenceLength(seqChar, &ns1);
+  getSequenceLengthInt(seqNum, &ns2);
 
   pairPr = (DBL_TYPE*) calloc( (length+1)*(length+1), sizeof(DBL_TYPE));
   pairPrPbg = (DBL_TYPE*) calloc( (length+1)*(length+1), sizeof(DBL_TYPE));

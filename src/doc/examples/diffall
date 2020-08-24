@@ -1,37 +1,56 @@
 #!/bin/bash
 #
-# diff the files in directories $OUT1 and $OUT2 for all examples
+# diff the files in "output" and "output.ref" for all examples
 # 
-# output should match except for dates
+# only the start time comments in the output files should differ
 #
-# Niles A. Pierce (27 January 2015)
+# Niles A. Pierce (11 October 2014)
 #
 
 OUT1="output"
-OUT2="output.ref"
-
-
-printf "\n*********************************************************** \n"
-printf   "diff files in $OUT1 and $OUT2                               \n"
-printf   "*********************************************************** \n"
+OUT2="output.ref-3.1.0k"
 
 printf "\n*********************************************************** \n"
-printf   "designs                                                     \n"
+printf   "diff output files for complex-analysis: simple examples     \n"
 printf   "*********************************************************** \n"
-diff -r ./designs/$OUT1 ./designs/$OUT2
+diff -r ./complex-analysis/simple/$OUT1 ./complex-analysis/simple/$OUT2
 
 printf "\n*********************************************************** \n"
-printf   "jacs04_walker                                               \n"
+printf   "diff output files for complex-analysis: advanced examples   \n"
 printf   "*********************************************************** \n"
-diff -r ./jacs04_walker/$OUT1 ./jacs04_walker/$OUT2
+diff -r ./complex-analysis/advanced/$OUT1 ./complex-analysis/advanced/$OUT2
 
 printf "\n*********************************************************** \n"
-printf   "jcc04_telomerase                                            \n"
+printf   "diff output files for complex-analysis: pseudoknot examples \n"
 printf   "*********************************************************** \n"
-diff -r ./jcc04_telomerase/$OUT1 ./jcc04_telomerase/$OUT2
+diff -r ./complex-analysis/pseudoknot/$OUT1 ./complex-analysis/pseudoknot/$OUT2
 
 printf "\n*********************************************************** \n"
-printf   "pnas04_hcr                                                  \n"
+printf   "diff output files for complex-design: simple examples       \n"
 printf   "*********************************************************** \n"
-diff -r ./pnas04_hcr/$OUT1 ./pnas04_hcr/$OUT2
+diff -r ./complex-design/simple/$OUT1 ./complex-design/simple/$OUT2
 
+printf "\n*********************************************************** \n"
+printf   "diff output files for complex-design: advanced examples     \n"
+printf   "*********************************************************** \n"
+diff -r ./complex-design/advanced/$OUT1 ./complex-design/advanced/$OUT2
+
+printf "\n*********************************************************** \n"
+printf   "diff output files for tube-analysis: simple examples        \n"
+printf   "*********************************************************** \n"
+diff -r ./tube-analysis/simple/$OUT1 ./tube-analysis/simple/$OUT2
+
+printf "\n*********************************************************** \n"
+printf   "diff output files for tube-analysis: advanced examples      \n"
+printf   "*********************************************************** \n"
+diff -r ./tube-analysis/advanced/$OUT1 ./tube-analysis/advanced/$OUT2
+
+printf "\n*********************************************************** \n"
+printf   "diff output files for tube-design: simple examples          \n"
+printf   "*********************************************************** \n"
+diff -r ./tube-design/simple/$OUT1 ./tube-design/simple/$OUT2
+
+printf "\n*********************************************************** \n"
+printf   "diff output files for tube-design: advanced examples        \n"
+printf   "*********************************************************** \n"
+diff -r ./tube-design/advanced/$OUT1 ./tube-design/advanced/$OUT2

@@ -7,13 +7,16 @@
   Uses the package getopt.h to retrieve option flags.
 */
 
-#include <stdio.h>
+#include "ReadCommandLine.h"
 #include <string.h>
 #include <stdlib.h>
-#include <getopt.h>// Takes options from the command line
+#include <getopt.h> // Takes options from the command line
 #include <time.h>
 #include <ctype.h>
-#include "complexesHeader.h"
+
+#include <shared.h>
+#include <thermo/core.h>
+#include "complexesStructs.h"
 
 extern globalArgs_t globalArgs;
 extern char PARAM_FILE[];
@@ -34,31 +37,37 @@ int ReadCommandLine(int nargs, char **args) {
   char param[MAXLINE];
   float temp;
 
+  /* version 3 output */
+  int prev_ordered = 0; // used to keep -ordered off if not specified before -v3
+
   static struct option long_options [] =
     {
-      {"quiet", no_argument,            NULL, 'a'},
-      {"ordered", no_argument,          NULL, 'b'},
-      {"out", required_argument,        NULL, 'c'},
-      {"pairs", no_argument,            NULL, 'd'},
-      {"T", required_argument,          NULL, 'e'},
-      {"dangles", required_argument,    NULL, 'f'},
-      {"material", required_argument,   NULL, 'g'},
-      {"help", no_argument,             NULL, 'h'},
-      {"timeonly", no_argument,         NULL, 'i'},
-      {"listonly", no_argument,         NULL, 'w'},
-      {"debug", no_argument,            NULL, 'v'},
-      {"echo", no_argument,             NULL, 'j'},
-      {"mfe", no_argument,              NULL, 'k'},
-      {"cutoff", required_argument,     NULL, 'l'},
-      {"progress", no_argument,         NULL, 'm'},
-      {"degenerate",no_argument,        NULL, 'n'},
-      {"sodium", required_argument,   NULL, 'o'},
-      {"magnesium", required_argument,   NULL, 'p'},
-      {"longhelixsalt", no_argument,    NULL, 'q'},
-      {"validate",no_argument,NULL,'r'},
-      {"defect",no_argument,NULL,'s'},
+      {"quiet",         no_argument,        NULL, 'a'},
+      {"ordered",       no_argument,        NULL, 'b'},
+      {"out",           required_argument,  NULL, 'c'},
+      {"pairs",         no_argument,        NULL, 'd'},
+      {"T",             required_argument,  NULL, 'e'},
+      {"dangles",       required_argument,  NULL, 'f'},
+      {"material",      required_argument,  NULL, 'g'},
+      {"help",          no_argument,        NULL, 'h'},
+      {"timeonly",      no_argument,        NULL, 'i'},
+      {"listonly",      no_argument,        NULL, 'w'},
+      {"debug",         no_argument,        NULL, 'v'},
+      {"echo",          no_argument,        NULL, 'j'},
+      {"mfe",           no_argument,        NULL, 'k'},
+      {"cutoff",        required_argument,  NULL, 'l'},
+      {"progress",      no_argument,        NULL, 'm'},
+      {"degenerate",    no_argument,        NULL, 'n'},
+      {"sodium",        required_argument,  NULL, 'o'},
+      {"magnesium",     required_argument,  NULL, 'p'},
+      {"longhelixsalt", no_argument,        NULL, 'q'},
+      {"validate",      no_argument,        NULL, 'r'},
+      {"defect",        no_argument,        NULL, 's'},
+      {"v3.0",          no_argument,        NULL, 'z'},
       {0, 0, 0, 0}
     };
+
+  SetExecutionPath(nargs, args);
 
 
   NUPACK_VALIDATE=0;
@@ -84,6 +93,7 @@ int ReadCommandLine(int nargs, char **args) {
 
       case 'b':
         globalArgs.permsOn = 1;
+        prev_ordered = 1;
         break;
 
       case 'c':
@@ -197,18 +207,18 @@ int ReadCommandLine(int nargs, char **args) {
         break;
 
       case 'o':
-	strcpy( line, optarg);
-	globalArgs.sodiumconc = str2double(line);
-	break;
+	      strcpy( line, optarg);
+	      globalArgs.sodiumconc = str2double(line);
+	      break;
 	
       case 'p':
-	strcpy( line, optarg);
-	globalArgs.magnesiumconc = str2double(line);
-	break;
+	      strcpy( line, optarg);
+	      globalArgs.magnesiumconc = str2double(line);
+	      break;
 	
       case 'q':
-	globalArgs.uselongsalt = 1;
-	break;
+	      globalArgs.uselongsalt = 1;
+	      break;
 
       case '?':
         // getopt_long already printed an error message.
@@ -224,12 +234,22 @@ int ReadCommandLine(int nargs, char **args) {
       case 's':
         globalArgs.dodefect = 1;
         break;
+      
+      case 'z':
+        globalArgs.v3 = 1;
+        globalArgs.permsOn = prev_ordered;
+        break;
+      
       default:
         abort ();
       }
     }
       
 
+  /* version 3 output */
+  if (!globalArgs.quiet) {
+    print_deprecation_info(stdout);
+  }
 
   if (ShowHelp) {
     DisplayHelpComplexes();
@@ -397,15 +417,15 @@ int ReadInputFileComplexes( char *filePrefix, int *nStrands,
   }
 
   //check if complex list size is included
-  fgets( line, MAXLINE, F_inp);
-  if( !line) {
+  char * check = fgets(line, MAXLINE, F_inp);
+  if(!check) {
     fclose( F_inp);
     return 1;
   }
-  while( line && (line[0] == '%' || line[0] == '>') ) {
-    fgets( line, MAXLINE, F_inp);
+  while(check && (line[0] == '%' || line[0] == '>') ) {
+    check = fgets( line, MAXLINE, F_inp);
   }
-  if ( !line) {
+  if (!check) {
     fclose( F_inp);
     return 1;
   }
@@ -417,7 +437,7 @@ int ReadInputFileComplexes( char *filePrefix, int *nStrands,
 
 /* ******** */
 void printHeader( int nStrands, char **seqs, int maxComplexSize,
-                  int nTotalOrders, int nSets, int nNewComplexes,
+                  int nTotalOrders, int nNewPerms, int nSets, int nNewComplexes,
                   FILE *F_cx, int nargs, char **argv, int isPairs) {
 
   char comment[2] = "%";
@@ -425,12 +445,13 @@ void printHeader( int nStrands, char **seqs, int maxComplexSize,
   time_t curtime;
   struct tm *loctime;
   int i;
-
+  int initial_perms = nTotalOrders - nNewPerms;
+  
   curtime = time(NULL); //current time
   loctime = localtime( &curtime);
 
 
-  fprintf(F_cx,"%s NUPACK %s\n",comment,VERSION);
+  fprintf(F_cx,"%s NUPACK %s\n",comment, NUPACK_VERSION);
   fprintf(F_cx,"%s Program: complexes\n",comment);
 
   strncpy(timestr,asctime(loctime),24);
@@ -454,13 +475,22 @@ void printHeader( int nStrands, char **seqs, int maxComplexSize,
     fprintf(F_cx, "%s Minimum output pair probability: %Lg\n",
             comment, globalArgs.cutoff);
   }
-
-  fprintf( F_cx, "%s Number of complexes from enumeration: %d\n",
-           comment, nSets);
-  fprintf( F_cx, "%s Additional complexes from .list file: %d\n",
-           comment, nNewComplexes);
-  fprintf( F_cx, "%s Total number of permutations to calculate: %d\n",
-           comment, nTotalOrders );
+  if (globalArgs.v3) {
+    fprintf( F_cx, "%s Number of complexes from enumeration: %d\n",
+             comment, nSets);
+    fprintf( F_cx, "%s Additional complexes from .list file: %d\n",
+             comment, nNewComplexes);
+    fprintf( F_cx, "%s Total number of permutations to calculate: %d\n",
+             comment, nTotalOrders );
+  }
+  else {
+    fprintf( F_cx, "%s Number of complexes from enumeration: %d\n",
+             comment, initial_perms);
+    fprintf( F_cx, "%s Additional complexes from .list file: %d\n",
+             comment, nNewPerms);
+    fprintf( F_cx, "%s Total number of complexes: %d\n",
+             comment, nTotalOrders );
+  }
 
   fprintf( F_cx, "%s Parameters: ", comment);
 
@@ -495,3 +525,17 @@ void printHeader( int nStrands, char **seqs, int maxComplexSize,
   fprintf( F_cx, "%s T = %.1f\n", comment, (float) globalArgs.T);
 }
 
+/* ******** */
+void print_deprecation_info(FILE *out) {
+  char *dep_mess = 
+  "Relative to NUPACK 3.0, the following changes were introduced to\n"
+  "the complexes executable:\n"
+  "  -ordered is on by default\n"
+  "  output files .cx and .cx-epairs are not written\n"
+  "  the comment lines in .ocx-epairs and .ocx-mfe employ updated terminology\n"
+  "Use the -v3.0 option to revert to NUPACK 3.0 behavior.\n\n";
+
+  fprintf(out, "%s", dep_mess);
+  
+  return;
+}

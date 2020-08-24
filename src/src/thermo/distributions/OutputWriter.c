@@ -11,11 +11,14 @@
 */
 
 
+#include "OutputWriter.h"
+  
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
-#include "DistributionsHeaderFile.h" // File with important definitions
+
+#include "constants.h"
 
 
 // Structure for sorting output that includes permutations

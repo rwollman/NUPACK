@@ -57,16 +57,15 @@ static int hash_grow(hash *h)
     return 0;
 }
 
-/* algorithm djb2
-static unsigned int strhash(const char *str)
+/* algorithm djb2 */
+unsigned int strhash(const char *str)
 {
     int c;
     int hash = 5381;
-    while ( (c = *str++) )
+    while ((c = *str++))
         hash = hash * 33 + c;
     return hash == 0 ? 1 : hash;
 }
-*/
 
 unsigned int vechash(const char *vec, const unsigned int len)
 {
@@ -81,7 +80,7 @@ unsigned int vechash(const char *vec, const unsigned int len)
 
 hash * hash_new(unsigned int capacity) {
     struct hash *h;
-    int i = 0, sind = 0;
+    int i, sind;
 
     capacity /= load_factor;
 

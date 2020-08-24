@@ -11,16 +11,9 @@
 #include <assert.h>
 #include <sys/time.h>
 
-#include "mt19937ar.h"
-
-#include "read_command_line.h"
-#include "design_pfunc_utils_header.h"
-#include "pfuncUtilsHeader.h"
-#include "physical_constants.h"
-#include "runtime_constants.h"
-#include "DNAExternals.h"
+#include <shared.h>
 #include "design_constants.h"
-#include "mt19937ar.h"
+#include "read_command_line.h"
 
 
 #define NUM_BASES 4

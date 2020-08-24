@@ -9,7 +9,8 @@
 */
 
 
-#include "ConcentrationsHeaderFile.h" // Concentrations header file
+#include "FracPair.h"
+#include "constants.h"
 
 /* ******************************************************************************** */
 void FracPair(int numSS, int nTotal, int quiet, int NoPermID, int LargestCompID, 
@@ -190,10 +191,12 @@ void FracPair(int numSS, int nTotal, int quiet, int NoPermID, int LargestCompID,
 
 
   // Blow through comments to first record
-  while (fgets(line,MAXLINE,fp) != NULL && strncmp(line,"% complex",9) != 0);
+  while (fgets(line,MAXLINE,fp) != NULL && strncmp(line,"% complex",9) != 0
+      && strncmp(line,"% composition",13) != 0);
 
   
-  if (strncmp(line,"% complex",9) == 0) { // We have data in the file
+  if (strncmp(line,"% complex",9) == 0 || strncmp(line,"% composition",13) == 0) { 
+    // We have data in the file
     ReachedEnd = 0;
   }
   else { // We're already at the end of the file; no data
@@ -204,7 +207,13 @@ void FracPair(int numSS, int nTotal, int quiet, int NoPermID, int LargestCompID,
   PermID = 0; // Initialize to zero in case NoPermID = 1.
   while (ReachedEnd == 0) {
     // Get the complex ID number
-    i = 9;  // Index in line string
+    i = 0;
+    if (strncmp(line, "% complex", 9) == 0) {
+      i = 9;  // Index in line string in v3.0.x
+    }
+    else if (strncmp(line, "% composition",13) == 0) {
+      i = 13; // Index in line string in v3.x x > 0
+    }
     n = i;
     while (isdigit(line[i])) {
       InStr[i-n] = line[i];
@@ -215,7 +224,12 @@ void FracPair(int numSS, int nTotal, int quiet, int NoPermID, int LargestCompID,
     
     // Get the permutation ID number
     if (NoPermID == 0) {
-      i += 6;  // This skips us past the "-order" to the perm ID
+      if (strncmp(line, "% complex", 9) == 0) {
+        i += 6; // This skips us past the "-order" to the perm ID
+      }
+      else if (strncmp(line, "% composition",13) == 0) {
+        i += 9; // This skips us past the "-ordering" to the perm ID
+      }
       n = i;
       while (isdigit(line[i])) {
         InStr[i-n] = line[i];
@@ -243,9 +257,11 @@ void FracPair(int numSS, int nTotal, int quiet, int NoPermID, int LargestCompID,
     }
 
     // Scan ahead to the next record
-    while (fgets(line,MAXLINE,fp) != NULL && strncmp(line,"% complex",9) != 0);
+    while (fgets(line,MAXLINE,fp) != NULL && strncmp(line,"% complex",9) != 0
+        && strncmp(line,"% composition",13) != 0);
 
-    if (strncmp(line,"% complex",9) != 0) { // Hit end of file
+    if (strncmp(line,"% complex",9) != 0 && strncmp(line,"% composition",13) != 0) {
+      // Hit end of file
       ReachedEnd = 1;
     }
   }

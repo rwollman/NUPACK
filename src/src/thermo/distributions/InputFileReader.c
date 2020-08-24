@@ -33,13 +33,12 @@
   and/or seg fault.
 */
 
-
+#include "InputFileReader.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
-#include "DistributionsHeaderFile.h" // File with constants and function prototypes
-
+#include "constants.h"
 
 // Structures for storing input and subsequent sorting
 struct CompStruct { // Struct for complexes (used for output)
@@ -858,14 +857,24 @@ void ReadInputFilesPerm(int ***A, double **G, int **CompIDArray, int **PermIDArr
     
     do {
       getResult=fgets(line,MAXLINE,fp);
-      if (getResult) printf("Got line     : %s",line);
+      if (getResult && !quiet) {
+#ifdef DEBUG
+        printf("Got line     : %s",line);
+#endif
+      }
       if (!getResult) {
         LineOK = 0;
-        printf("LineOK=0\n");
+#ifdef DEBUG
+          printf("LineOK=0\n");
+#endif
         break;
       }
     } while (line[0] == '%' || line[0] == '\0' || line[0] == '\n');
-    if (getResult) printf("ACCEPTED line: %s",line);
+    if (getResult) {
+#ifdef DEBUG
+      printf("ACCEPTED line: %s",line);
+#endif
+    }
     k++;
   }
   fclose(fp);

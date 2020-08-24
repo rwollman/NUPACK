@@ -1,0 +1,7 @@
+Relative to NUPACK 3.0, the following change was introduced to the
+distributions executable: the -ordered option is on by default.
+Use the -v3.0 option to revert to NUPACK 3.0 behavior.
+
+There are 246 populations in Lambda.
+Free energy of the box: -9.808100e+01 kT, or -1.003809e-22 kcal
+Elapsed time: 0 seconds.

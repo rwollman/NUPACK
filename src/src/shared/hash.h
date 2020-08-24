@@ -5,12 +5,13 @@
    02/12/2008 Make it possible to use keys with \0 chars
  */
 
-#ifndef __HASH__
-#define __HASH__
+#ifndef NUPACK_SHARED_HASH_H
+#define NUPACK_SHARED_HASH_H
  
 #ifdef __cplusplus
 extern "C" {
-#endif 
+#endif /* __cplusplus */
+
 
 
 

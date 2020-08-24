@@ -17,8 +17,7 @@
 #include <time.h>
 #include <string.h>
 
-#include "pfuncUtilsHeader.h"
-#include "DNAExternals.h"
+#include <thermo/core.h>
 
 /* ************************************************ */
 

@@ -8,14 +8,13 @@
   use with NUPACK.
  */
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<math.h>
-#include<time.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+#include <string.h>
 
-#include "pfuncUtilsHeader.h"
-#include"DNAExternals.h"
+#include <thermo/core.h>
 
 /* ************************************************ */
 extern DBL_TYPE *pairPrPbg;  //for pseudoknots
@@ -101,7 +100,7 @@ int main( int argc, char *argv[] ) {
 
 
   // Make sure the target structure is in thepairs format
-  if (parens != NULL && parens[0] != '\0') {
+  if (parens[0] != '\0') {
     getStructureFromParens( parens, thepairs, seqlength);
   }
 
@@ -117,7 +116,7 @@ int main( int argc, char *argv[] ) {
 
   // Check to see if the results is close to NAD_INFINITY and report
   // error if it is
-  if (fabs(1.0 - ene/NAD_INFINITY) < INF_CUTOFF) {
+  if (ABS_FUNC(1.0 - ene/NAD_INFINITY) < INF_CUTOFF) {
     printf("\n\n*** Error: target structure has invalid base pair(s) or disconnected complex. Check your inputs. ***\n\n");
     return 0;
   }

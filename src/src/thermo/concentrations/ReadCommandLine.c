@@ -79,7 +79,8 @@
   Justin Bois, Caltech, 2 September 2006
 */
 
-#include "ConcentrationsHeaderFile.h" // Concentrations header file
+#include "ReadCommandLine.h"
+#include "constants.h"
 
 /* ******************************************************************************** */
 void ReadCommandLine(int nargs, char **args, char *cxFile, char *conFile, 
@@ -87,7 +88,7 @@ void ReadCommandLine(int nargs, char **args, char *cxFile, char *conFile,
 		     int *SortOutput, int *MaxIters, double *tol, double *kT,
 		     int *MaxNoStep, int *MaxTrial, double *PerturbScale, int *quiet,
 		     int *WriteLogFile, int *Toverride, int *NoPermID, 
-		     int *DoBPfracs, unsigned long *seed, double *cutoff,int * NUPACK_VALIDATE) {
+		     int *DoBPfracs, unsigned long *seed, double *cutoff,int * NUPACK_VALIDATE, int *v3) {
 
   int options;  // Counters used in getting flags
   int ShowHelp; // ShowHelp = 1 if help option flag is selected
@@ -114,37 +115,45 @@ void ReadCommandLine(int nargs, char **args, char *cxFile, char *conFile,
   *PerturbScale = 100; // Default is a scale of 100 on the perturb scale
   *WriteLogFile = 0; // Default is not to write a log file
   *Toverride = 0; // Default is to either use T = 37 or that specified in input file
-  *NoPermID = 1; // Default is to use .cx file => no permutation IDs in file
+  *NoPermID = 0; // Default is to use .ocx file => permutation IDs in file
   *DoBPfracs = 0; // Default is not to generate fpairs file.
   *seed = 0; // Default is to seed off the clock.
   *cutoff = 0.001; // Default cutoff
   *NUPACK_VALIDATE = 0;
   ShowHelp = 0;
   
+  /* version 3 output */
+  *v3 = 0;
+  int prev_ordered = 1; // used to keep -ordered off if not specified before -v3
+  
+  SetExecutionPath(nargs, args);
+  
   // Get the option flags
   while (1)
     {
       static struct option long_options [] =
-	{
-          {"sort", required_argument,        0, 'a'},
-	  {"maxiters", required_argument,    0, 'b'},
-	  {"tol", required_argument,         0, 'c'},
-	  {"T", required_argument,           0, 'd'},
-	  {"quiet", no_argument,             0, 'e'},
-	  {"maxtrial",   required_argument,  0, 'f'},
-	  {"maxnostep", required_argument,   0, 'g'},
-	  {"help", no_argument,              0, 'h'},
-	  {"perturbscale", required_argument,0, 'i'},
-	  {"writelogfile", no_argument,      0, 'j'},
-	  {"ordered",      no_argument,      0, 'k'},
-	  {"pairs",       no_argument,       0, 'l'},
-	  {"seed",       required_argument,  0, 'm'},
-	  {"cutoff",       required_argument,0, 'n'},
-    {"validate",  no_argument,0,'o'},
+	      {
+          {"sort",          required_argument,  0, 'a'},
+	        {"maxiters",      required_argument,  0, 'b'},
+	        {"tol",           required_argument,  0, 'c'},
+	        {"T",             required_argument,  0, 'd'},
+	        {"quiet",         no_argument,        0, 'e'},
+	        {"maxtrial",      required_argument,  0, 'f'},
+	        {"maxnostep",     required_argument,  0, 'g'},
+	        {"help",          no_argument,        0, 'h'},
+	        {"perturbscale",  required_argument,  0, 'i'},
+	        {"writelogfile",  no_argument,        0, 'j'},
+	        {"ordered",       no_argument,        0, 'k'},
+	        {"pairs",         no_argument,        0, 'l'},
+	        {"seed",          required_argument,  0, 'm'},
+	        {"cutoff",        required_argument,  0, 'n'},
+          {"validate",      no_argument,        0, 'o'},
+          {"v3.0",          no_argument,        0, 'z'},
           {0, 0, 0, 0}
         };
       /* getopt_long stores the option index here. */
       int option_index = 0;
+
 
       options = getopt_long_only (nargs, args, 
 				  "a:b:c:d:ef:g:hi:jklm:n:o", long_options, 
@@ -157,87 +166,99 @@ void ReadCommandLine(int nargs, char **args, char *cxFile, char *conFile,
       switch (options)
         {
         case 'a':
-	  strcpy(InputStr,optarg);
-	  *SortOutput = atoi(InputStr);
-	  // NoSortOutputOption = 0; // Record that we've selected a sorting option
+	        strcpy(InputStr,optarg);
+	        *SortOutput = atoi(InputStr);
+	        // NoSortOutputOption = 0; // Record that we've selected a sorting option
           break;
 
-	case 'b':
-	  strcpy(InputStr,optarg);
-	  *MaxIters = atoi(InputStr);
-	  break;
+	      case 'b':
+	        strcpy(InputStr,optarg);
+	        *MaxIters = atoi(InputStr);
+	        break;
 
-	case 'c':
-	  strcpy(InputStr,optarg);
-	  *tol = str2double(InputStr);
-	  break;
+	      case 'c':
+	        strcpy(InputStr,optarg);
+	        *tol = str2double(InputStr);
+	        break;
 
-	case 'd':
-	  strcpy(InputStr,optarg);
-	  *kT = kB*(str2double(InputStr) + ZERO_C_IN_KELVIN);
-	  *Toverride = 1;
-	  break;
+	      case 'd':
+	        strcpy(InputStr,optarg);
+	        *kT = kB*(str2double(InputStr) + ZERO_C_IN_KELVIN);
+	        *Toverride = 1;
+	        break;
 
-	case 'e':
-	  *quiet = 1;
-	  break;
+	      case 'e':
+	        *quiet = 1;
+	        break;
 
-	case 'f':
-	  strcpy(InputStr,optarg);
-	  (*MaxTrial) = atoi(InputStr);
-	  break;
+	      case 'f':
+	        strcpy(InputStr,optarg);
+	        (*MaxTrial) = atoi(InputStr);
+	        break;
 
         case 'g':
-	  strcpy(InputStr,optarg);
-	  (*MaxNoStep) = atoi(InputStr);
+	        strcpy(InputStr,optarg);
+	        (*MaxNoStep) = atoi(InputStr);
           break;
 
         case 'h':
-	  ShowHelp = 1;
+	        ShowHelp = 1;
           break;
 
         case 'i':
-	  strcpy(InputStr,optarg);
-	  (*PerturbScale) = str2double(InputStr);
+	        strcpy(InputStr,optarg);
+	        (*PerturbScale) = str2double(InputStr);
           break;
 
-	case 'j':
-	  *WriteLogFile = 1;
-	  break;
+	      case 'j':
+	        *WriteLogFile = 1;
+	        break;
 
-	case 'k':
-	  *NoPermID = 0;
-	  break;
+	      case 'k':
+	        *NoPermID = 0;
+          prev_ordered = 0;
+	        break;
 
-	case 'l':
-	  *DoBPfracs = 1;
-	  break;
+	      case 'l':
+	        *DoBPfracs = 1;
+	        break;
 
-	case 'm':
-	  strcpy(InputStr,optarg);
-	  (*seed) = (unsigned long)atol(InputStr);
-	  break;
+	      case 'm':
+	        strcpy(InputStr,optarg);
+	        (*seed) = (unsigned long)atol(InputStr);
+	        break;
 
-	case 'n':
-	  strcpy(InputStr,optarg);
-	  (*cutoff) = str2double(InputStr);
-	  break;
-  case 'o':
-    *NUPACK_VALIDATE = 1;
-    *tol = 0.0000000000001;
-	  *SortOutput = 3;
-	  // NoSortOutputOption = 0; // Record that we've selected a sorting option
-    *cutoff = 0;
-    break;
+	      case 'n':
+	        strcpy(InputStr,optarg);
+	        (*cutoff) = str2double(InputStr);
+	        break;
+
+        case 'o':
+          *NUPACK_VALIDATE = 1;
+          *tol = 0.0000000000001;
+	        *SortOutput = 3;
+	        // NoSortOutputOption = 0; // Record that we've selected a sorting option
+          *cutoff = 0;
+          break;
+
+        case 'z':
+          *v3 = 1;
+          *NoPermID = prev_ordered;
+          break;
 
         case '?':
           // getopt_long already printed an error message.
           break;
-
+        
         default:
-          abort ();
+          abort();
         }
     }
+
+  /* version 3 output */
+  if (!*quiet) {
+    print_deprecation_info(stdout);
+  }
 
   if (ShowHelp) {
     DisplayHelpConc();
@@ -326,5 +347,16 @@ void DisplayHelpConc() {
   printf(" -quiet               suppress output to the screen\n");
   printf("\n");
 
+}
+/* ******************************************************************************** */
+void print_deprecation_info(FILE *out) {
+  char *dep_mess = 
+  "Relative to NUPACK 3.0, the following change was introduced to the\n"
+  "concentrations executable: the -ordered option is on by default.\n"
+  "Use the -v3.0 option to revert to NUPACK 3.0 behavior.\n\n";
+
+  fprintf(out, "%s", dep_mess);
+  
+  return;
 }
 /* ******************************************************************************** */

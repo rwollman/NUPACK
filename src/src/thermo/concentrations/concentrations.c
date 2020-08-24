@@ -23,12 +23,12 @@
   Justin Bois, Caltech, 2 September 2006
 */
 
-
-#include "ConcentrationsHeaderFile.h" // Header file for Concentrations
-
-/* ******************************************************************************** */
-/*                                BEGIN MAIN                                        */
-/* ******************************************************************************** */
+#include "CalcConc.h"
+#include "FracPair.h"
+#include "InputFileReader.h"
+#include "OutputWriter.h"
+#include "ReadCommandLine.h"
+#include "constants.h"
 
 int main(int argc, char *argv[]) {
 
@@ -77,11 +77,16 @@ int main(int argc, char *argv[]) {
   FILE *fplog; // The logFile, which contains information about the run.
   FILE *fpeq; // The .eq file, which contains the output of the file.
   FILE *fpfpairs; // file handle for fpairs file
+  
+  /* version 3 output */
+  int v3;
 
   // Read command line arguments
   ReadCommandLine(argc,argv,cxFile,conFile,logFile,eqFile,pairsFile,fpairsFile,
 		  &SortOutput,&MaxIters,&tol,&kT,&MaxNoStep,&MaxTrial,&PerturbScale,
-		  &quiet,&WriteLogFile,&Toverride,&NoPermID,&DoBPfracs,&seed,&cutoff,&NUPACK_VALIDATE);
+		  &quiet,&WriteLogFile,&Toverride,&NoPermID,&DoBPfracs,&seed,&cutoff,&NUPACK_VALIDATE,
+      &v3);
+
 
   // Pull eta and deltaBar from global variables
   eta = TRUST_REGION_ETA;
@@ -101,7 +106,7 @@ int main(int argc, char *argv[]) {
       }
       exit(ERR_LOG);
     }
-    fprintf(fplog,"*NUPACK %s\n",VERSION);
+    fprintf(fplog,"*NUPACK %s\n", CMAKE_NUPACK_VERSION);
     fprintf(fplog,"*This is %s, a log file generated for a \"concentrations\"\n",
 	    logFile);
     fprintf(fplog," calculation using input files %s and %s.\n",cxFile,conFile);
@@ -127,7 +132,7 @@ int main(int argc, char *argv[]) {
     }
     exit(ERR_EQ);
   }
-  fprintf(fpeq,"%% NUPACK %s\n",VERSION);
+  fprintf(fpeq,"%% NUPACK %s\n", CMAKE_NUPACK_VERSION);
   fprintf(fpeq,"%% This is %s, an output file generated for a \"concentrations\"\n",
 	  eqFile);
   fprintf(fpeq,"%% calculation of equilibrium concentrations.\n");
@@ -150,7 +155,7 @@ int main(int argc, char *argv[]) {
       }
       exit(ERR_FPAIRS);
     }
-    fprintf(fpfpairs,"%% NUPACK %s\n",VERSION);
+    fprintf(fpfpairs,"%% NUPACK %s\n", CMAKE_NUPACK_VERSION);
     fprintf(fpfpairs,"%% This is %s, an output file generated for a ",fpairsFile);
     fprintf(fpfpairs,"\"concentrations\"\n");
     fprintf(fpfpairs,"%% calculation of base pair fractions.\n");
@@ -272,6 +277,3 @@ int main(int argc, char *argv[]) {
   return 0; // Return
 
 }
-/* ******************************************************************************** */
-/*                                  END MAIN                                        */
-/* ******************************************************************************** */

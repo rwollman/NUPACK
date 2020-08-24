@@ -40,11 +40,13 @@
   For formats of the input and output files, etc., see the associated README file.
 */
 
+#include "CalcDist.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>  // Must compile with -lm option
-#include "DistributionsHeaderFile.h" // File with constants and function prototypes
+
+#include "constants.h"
 
 
 /* ******************************************************************************** */

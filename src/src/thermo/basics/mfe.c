@@ -11,14 +11,13 @@
     with regard to space and time.
 */
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<math.h>
-#include<time.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+#include <string.h>
 
-#include "pfuncUtilsHeader.h"
-#include "DNAExternals.h"
+#include <thermo/core.h>
 
 /* ************************************************ */
 

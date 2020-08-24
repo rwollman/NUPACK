@@ -1,4 +1,6 @@
+
 #include "design_engine.h"
+#include "design_pfunc_utils.h"
 
 #ifdef LEAFCORRECTION
 int nodeCounter = 0;
@@ -11,7 +13,7 @@ void designHeader(int argc, char ** argv,
   
   FILE * out = fopen(filename,"w");
   
-  fprintf(out,"%s NUPACK %s\n", COMMENT_STRING,VERSION);
+  fprintf(out,"%s NUPACK %s\n", COMMENT_STRING, NUPACK_VERSION);
   fprintf(out,"%s Program: %s\n",COMMENT_STRING,"design");
   fprintf(out,"%s Start time: %s", COMMENT_STRING, asctime( start_s_tm));
   fprintf(out,"%s Command: ", COMMENT_STRING);
@@ -247,13 +249,16 @@ void setNewBestN(secStruc *myStruc) {
   #ifdef LEAFCORRECTION
   if (hasChildren(myStruc)) {
     if (myStruc->leftChild->modified) {
-      /* secStruc *leftChild = myStruc->leftChild; */
+      // secStruc *leftChild = myStruc->leftChild;
       copyLeafArrayFromChild(myStruc,myStruc->leftChild);
+
     }
     if (myStruc->rightChild->modified) {
+
       copyLeafArrayFromChild(myStruc,myStruc->rightChild);
     }
-    /* secStruc *leftChild = myStruc->leftChild; */
+    // secStruc *leftChild = myStruc->leftChild;
+
     
     int i = 0;
     DBL_TYPE *tempValues = (DBL_TYPE *)calloc(myStruc->length, sizeof(DBL_TYPE));
@@ -285,7 +290,7 @@ void setNewBestMFE(secStruc *myStruc) {
   #ifdef LEAFCORRECTION
   if (hasChildren(myStruc)) {
     if (myStruc->leftChild->modified) {
-      /* secStruc *leftChild = myStruc->leftChild; */
+      // secStruc *leftChild = myStruc->leftChild;
       copyLeafArrayFromChild(myStruc,myStruc->leftChild);
 
     }
@@ -293,7 +298,7 @@ void setNewBestMFE(secStruc *myStruc) {
 
       copyLeafArrayFromChild(myStruc,myStruc->rightChild);
     }
-    /* secStruc *leftChild = myStruc->leftChild; */
+    // secStruc *leftChild = myStruc->leftChild;
 
     
     int i = 0;
@@ -1459,7 +1464,7 @@ int violatesSSM(secStruc *myStruc, int wordLength) {
 		word[0] = BASE_A;
 		word[1] = BASE_C;
 		word[2] = BASE_G;
-		word[3] = baseT;
+		word[3] = BASE_U;
 		word[4] = BASE_A;
 		word[5] = BASE_C;
 		
@@ -2376,7 +2381,7 @@ void mutateRandomConflict(secStruc *myStruc, mutation *candidateMutation) {
 	
 	DBL_TYPE randNum = genrand_real2();
 	
-	int theOne = 0;
+	int theOne;
 
 	int i;
 	DBL_TYPE probSum = 0.0;

@@ -635,9 +635,12 @@ int * reverseStr(int *str, int length) {
 int verifyStructure(char *parens, char *targetParens) {
 	
 	int retVal;
+
+#ifdef DEBUG
 	int length = strlen(parens);
 	
 	assert(length == strlen(targetParens));
+#endif
 	
 	if (strcmp(parens, targetParens) != 0) {
 		#ifdef DEBUG
