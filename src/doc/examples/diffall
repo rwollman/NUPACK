@@ -8,7 +8,7 @@
 #
 
 OUT1="output"
-OUT2="output.ref-3.1.0k"
+OUT2="output.ref-3.2.0e"
 
 printf "\n*********************************************************** \n"
 printf   "diff output files for complex-analysis: simple examples     \n"
@@ -54,3 +54,13 @@ printf "\n*********************************************************** \n"
 printf   "diff output files for tube-design: advanced examples        \n"
 printf   "*********************************************************** \n"
 diff -r ./tube-design/advanced/$OUT1 ./tube-design/advanced/$OUT2
+
+printf "\n*********************************************************** \n"
+printf   "diff output files for multitube-design: simple examples     \n"
+printf   "*********************************************************** \n"
+diff -r ./multitube-design/simple/$OUT1 ./multitube-design/simple/$OUT2
+
+printf "\n*********************************************************** \n"
+printf   "diff output files for multitube-design: advanced examples   \n"
+printf   "*********************************************************** \n"
+diff -r ./multitube-design/advanced/$OUT1 ./multitube-design/advanced/$OUT2

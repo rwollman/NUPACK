@@ -1,0 +1,15 @@
+% NUPACK 3.2.0
+% Program: pfunc
+% Start time: Mon Mar  6 23:42:19 2017
+% Command: pfunc -material dna -multi input/walker 
+% Sequence:  GGCTGGTTTCTGCTCTCTAGTTCGCGAGGTGCAATCTCCTATC+GTCTGGGATGCTGGATACTGAACCTAGAGAGCAGAAACCAGCC
+% v(pi): 1
+% Parameters: DNA, 1998
+% Dangles setting: 1
+% Temperature (C): 37.0
+% Sodium concentration: 1.0000 M
+% Magnesium concentration: 0.0000 M
+%
+% Free energy (kcal/mol) and partition function:
+-3.21504349e+01
+4.51871609537112e+22

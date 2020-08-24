@@ -1,0 +1,19 @@
+#
+# design material and temperature (C)
+#
+material = rna
+temperature = 23.0
+seed = 93
+
+#
+# target structure using dot-parens-plus notation
+#
+domain a = N27
+domain b = N29
+domain c = N25
+domain d = N18
+
+complex stickman = a b c d
+stickman.structure = ..((((((((..((((((((((((...+))))))(((.........)))((((((..+.))))))))))))..((((((((..+.)))))))))))))))).
+
+stop[%] = 1

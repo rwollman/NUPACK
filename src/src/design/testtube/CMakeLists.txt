@@ -43,15 +43,15 @@ add_executable(tubedefect defect_main.c pathway_design.c pathway_utils.c
 #     pathway_output.c equilibrium_concentrations.c utils.c pathway_input.c
 #     ${BISON_TUBEPARSER_OUTPUTS} ${FLEX_TUBESCANNER_OUTPUTS})
 
-target_link_libraries(tubedesign nupackpfunc nupackutils m ${CLANG_ASAN} ${MPI_C_LIBRARIES})
-target_link_libraries(tubedefect nupackpfunc nupackutils m ${CLANG_ASAN} ${MPI_C_LIBRARIES})
+target_link_libraries(tubedesign nupackpfunc nupackutils ${MATH_LIB} ${CLANG_ASAN} ${MPI_C_LIBRARIES})
+target_link_libraries(tubedefect nupackpfunc nupackutils ${MATH_LIB} ${CLANG_ASAN} ${MPI_C_LIBRARIES})
 
 if(BISONFLEX)
 add_dependencies(tubedesign tubedesign_rename)
 add_dependencies(tubedefect tubedesign_rename)
 endif(BISONFLEX)
 
-# target_link_libraries(decomp nupackpfunc nupackutils m ${CLANG_ASAN})
+# target_link_libraries(decomp nupackpfunc nupackutils  ${CLANG_ASAN})
 
 # add_executable(parsetest parsetest.c pathway_input.c 
 # ${BISON_TUBEPARSER_OUTPUTS} ${FLEX_TUBESCANNER_OUTPUTS})

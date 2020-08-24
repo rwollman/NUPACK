@@ -1,7 +1,7 @@
 This is the README file in the $NUPACKHOME/doc/examples directory
-of the NUPACK 3.1 source code
+of the NUPACK 3.2 source code
 
-22 February 2017
+5 March 2017
 
 The directory structure of $NUPACKHOME/doc/examples 
 is as follows: 
@@ -21,9 +21,13 @@ tube-analysis
 tube-design 
    simple, advanced
 	runjobs, input, output, output.ref
+
+multitube-design
+   simple, advanced
+	runjobs, input, output, output.ref
 	
 
-Four subdirectories (complex-analysis, complex-design, tube-analysis, tube-design)
+Five subdirectories (complex-analysis, complex-design, tube-analysis, tube-design, multitube-design)
 correspond to different problem classes. 
 
 Within each of these, three subdirectories (simple, advanced, pseudoknot) 
@@ -37,9 +41,9 @@ reading input files from the directory "input" and
 writing output files to the directory "output". The generated results
 in directory "output" can be compared to the reference results 
 in directory "output.ref" to check that your local installation 
-of NUPACK 3.1 is running properly. 
+of NUPACK 3.2 is running properly. 
 
 Alternatively, in directory $NUPACKHOME/doc/examples, run the script "runall"
-to run all of the "runjobs" scripts (a total of 9 "runjobs" scripts).
+to run all of the "runjobs" scripts (a total of 11 "runjobs" scripts).
 Then run the script "diffall" to compare the files in the "output" directories with the 
 corresponding files in the "output.ref" directories. 

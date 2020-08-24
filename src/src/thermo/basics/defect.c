@@ -116,10 +116,10 @@ int main( int argc, char *argv[] ) {
 
   // Check to see if the results is close to NAD_INFINITY and report
   // error if it is
-  if (ABS_FUNC(1.0 - ene/NAD_INFINITY) < INF_CUTOFF) {
-    printf("\n\n*** Error: target structure has invalid base pair(s) or disconnected complex. Check your inputs. ***\n\n");
-    return 0;
-  }
+  // if (ABS_FUNC(1.0 - ene/NAD_INFINITY) < INF_CUTOFF) {
+  //   printf("\n\n*** Error: target structure has invalid base pair(s) or disconnected complex. Check your inputs. ***\n\n");
+  //   return 0;
+  // }
   // ******************************
 
 

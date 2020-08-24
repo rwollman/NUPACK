@@ -1,0 +1,83 @@
+NUPACK version: 3.2.0
+Backend: tubedesign
+Design index: 0
+Options: 
+    temperature: 296.150000
+    material: dna1998
+    sodium: 1.000000
+    magnesium: 0.000000
+    dangle_type: 1
+    use_long_helix: 0
+    seed: 93
+    H_split: 3
+    N_split: 12
+    M_bad: 300.000000
+    M_reopt: 3.000000
+    M_reseed: 50.000000
+    f_split: 0.990000
+    f_passive: 0.010000
+    f_stringent: 0.990000
+    f_refocus: 0.030000
+    f_redecomp: 0.030000
+    initgc: 0.500000
+    dgclamp: -25.000000
+    allow_wobble: 0
+Root time: 1.121267
+Elapsed time: 2.605130
+Domains:
+  - Name: a
+    Sequence: GGTCTA
+  - Name: a*
+    Sequence: TAGACC
+  - Name: b
+    Sequence: CCGCACCCTCTTCTTCGC
+  - Name: b*
+    Sequence: GCGAAGAAGAGGGTGCGG
+  - Name: c
+    Sequence: TACAAT
+  - Name: c*
+    Sequence: ATTGTA
+Strands:
+  - Name: I
+    Sequence: GCGAAGAAGAGGGTGCGGTAGACC
+  - Name: A
+    Sequence: GGTCTACCGCACCCTCTTCTTCGCATTGTAGCGAAGAAGAGGGTGCGG
+  - Name: B
+    Sequence: GCGAAGAAGAGGGTGCGGTAGACCCCGCACCCTCTTCTTCGCTACAAT
+Objectives:
+  - Name: HCR
+    Normalized defect: 0.019175
+    Stop fraction: 0.020000
+    Max size: 3
+    Structures:
+      - Name: monomer1
+        Structure: ......((((((((((((((((((......))))))))))))))))))
+        Sequence : GGTCTACCGCACCCTCTTCTTCGCATTGTAGCGAAGAAGAGGGTGCGG
+        Free energy: -30.824835
+        Defect: 0.147021
+        Normalized defect: 0.003063
+        Concentration: 1.000435e-06
+        Target concentration: 1.000000e-06
+      - Name: monomer2
+        Structure: ((((((((((((((((((......))))))))))))))))))......
+        Sequence : GCGAAGAAGAGGGTGCGGTAGACCCCGCACCCTCTTCTTCGCTACAAT
+        Free energy: -29.974809
+        Defect: 0.217123
+        Normalized defect: 0.004523
+        Concentration: 1.006682e-06
+        Target concentration: 1.000000e-06
+      - Name: polymer
+        Structure: ((((((((((((((((((((((((((((((((((((((((((((((((+........................))))))))))))))))))))))))+))))))))))))))))))))))))
+        Sequence : GGTCTACCGCACCCTCTTCTTCGCATTGTAGCGAAGAAGAGGGTGCGG+GCGAAGAAGAGGGTGCGGTAGACCCCGCACCCTCTTCTTCGCTACAAT+GCGAAGAAGAGGGTGCGGTAGACC
+        Free energy: -87.325007
+        Defect: 9.610705
+        Normalized defect: 0.080089
+        Concentration: 9.324543e-08
+        Target concentration: 1.000000e-07
+      - Name: gen:A-I
+        Sequence : GGTCTACCGCACCCTCTTCTTCGCATTGTAGCGAAGAAGAGGGTGCGG+GCGAAGAAGAGGGTGCGGTAGACC
+        Free energy: -45.271493
+        Defect: 51.555052
+        Normalized defect: 0.716042
+        Concentration: 6.256458e-09
+        Target concentration: 0.000000e+00

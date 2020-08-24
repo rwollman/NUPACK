@@ -5,7 +5,7 @@ function(np_add_executable NAME)
                           nupackpfunc 
                           nupackutils 
                           ${CLANG_ASAN} 
-                          m
+                          ${MATH_LIB}
                           ${MPI_C_LIBRARIES}
     )
     install(TARGETS ${NAME} RUNTIME DESTINATION ${BIN_DIR})

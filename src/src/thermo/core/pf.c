@@ -115,6 +115,13 @@ DBL_TYPE pfuncFullWithSymHelper( int inputSeq[], int seqlength, int nStrands,
   int i, j; // the beginning and end bases for Q;
   int L; //This the length of the current subsequence 
   int pf_ij; //index for O(N^2) matrixes; used to reduce calls to pf_index;
+#ifdef NUPACK_SAMPLE
+  // variables for sampling
+  int sample_count;
+  int sample_offset;
+  int nNicks;
+  int pair_flag;
+#endif // NUPACK_SAMPLE
   DBL_TYPE returnValue;
 
 
@@ -159,6 +166,12 @@ DBL_TYPE pfuncFullWithSymHelper( int inputSeq[], int seqlength, int nStrands,
     printf("  Pseudoknots disabled.\n");
     complexity = 3;
   }
+#ifdef NUPACK_SAMPLE
+  if(nupack_sample && complexity != 3) {
+    printf("Warning, sampling only supported for complexity = 3\n");
+    complexity = 3;
+  }
+#endif
 
   LoadEnergies();
 
@@ -337,6 +350,73 @@ DBL_TYPE pfuncFullWithSymHelper( int inputSeq[], int seqlength, int nStrands,
 
 
 
+#ifdef NUPACK_SAMPLE
+  if(nupack_sample) {
+    if(nupack_sample_list == NULL) {
+      printf("NULL pointer for structure storage, exiting\n");
+      exit(1);
+    }
+    isPairPrExtern = TRUE;
+    if( pairPr == NULL 
+        ) {
+      pairPr = (DBL_TYPE*) calloc( (seqlength+1)*(seqlength+1), 
+                                  sizeof(DBL_TYPE));
+      isPairPrExtern = FALSE;
+    }
+
+
+    InitLDoublesMatrix( &P, arraySize, "P");
+    InitLDoublesMatrix( &Pb, arraySize, "Pb");
+    InitLDoublesMatrix( &Pm, arraySize, "Pm");
+    InitLDoublesMatrix( &Pms, arraySize, "Pms");
+    InitLDoublesMatrix( &Ps, arraySize, "Ps");
+      
+
+    for(sample_count = 0 ; sample_count < nupack_num_samples ; sample_count++) {
+      ClearLDoublesMatrix(&P, arraySize, "P");
+      ClearLDoublesMatrix(&Pb, arraySize, "Pb");
+      ClearLDoublesMatrix(&Pm, arraySize, "Pm");
+      ClearLDoublesMatrix(&Pms, arraySize, "Pms");
+      ClearLDoublesMatrix(&Ps, arraySize, "Ps");
+    
+      calculatePairsN3(Q, Qb, Qm, Qms, Qs,
+                       &Qx, &Qx_1, &Qx_2, Qb_bonus, P, Pb, Pm, Pms,
+                       Ps, seqlength, seq, nicks, etaN);
+      // Copy the structure from the matrix to the dot-paren format
+      sample_offset = 0;
+      nNicks = etaN[EtaNIndex(0-0.5,seqlength-0.5,seqlength)][0];
+      // First, fill in with unpaired bases
+      for(i = 0 ; i < seqlength + nNicks ; i++) {
+        nupack_sample_list[sample_count][i] = '.';
+      }
+      for(i = 0 ; i < seqlength ; i++) {
+        pair_flag = FALSE;
+        if(nNicks > sample_offset && nicks[sample_offset] < i) {
+          nupack_sample_list[sample_count][i + etaN[EtaNIndex(-0.5,i-1.5,seqlength)][0]] 
+          = '+';
+          sample_offset ++;
+        }
+        for(j = i+1; j < seqlength ; j++) {
+          if(Pb[pf_index(i,j,seqlength)] > 0.5) {
+          // Really going to be either 0 or 1, but whatever
+            pair_flag = TRUE;
+            // The +etaN is just to make sure that I account for + in the sequence
+            nupack_sample_list[sample_count][i+etaN[EtaNIndex(-0.5,i-0.5,seqlength)][0]] 
+            = '(';
+            nupack_sample_list[sample_count][j+etaN[EtaNIndex(-0.5,j-0.5,seqlength)][0]]  
+            = ')';
+          } 
+        }
+      }
+      nupack_sample_list[sample_count][seqlength + nNicks] = '\0';
+    }
+    free(P);
+    free(Pb);
+    free(Pm);
+    free(Pms);
+    free(Ps);
+  } 
+#endif //NUPACK_SAMPLE
   //Calculate Pair Probabilities as needed 
   if(calcPairs) {
     /*
@@ -351,6 +431,10 @@ DBL_TYPE pfuncFullWithSymHelper( int inputSeq[], int seqlength, int nStrands,
       pairPr = (DBL_TYPE*) calloc( (seqlength+1)*(seqlength+1), 
                                   sizeof(DBL_TYPE));
       isPairPrExtern = FALSE;
+    #ifdef NUPACK_SAMPLE
+    } else if(nupack_sample) {
+      isPairPrExtern = FALSE;
+    #endif //NUPACK_SAMPLE
     }
     if( complexity == 3) {
       InitLDoublesMatrix(  &P, arraySize, "P");

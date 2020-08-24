@@ -1,0 +1,46 @@
+NUPACK version: 3.2.0
+Backend: tubedesign
+Design index: 0
+Options: 
+    temperature: 310.150000
+    material: dna1998
+    sodium: 1.000000
+    magnesium: 0.000000
+    dangle_type: 1
+    use_long_helix: 0
+    seed: 93
+    H_split: 3
+    N_split: 12
+    M_bad: 300.000000
+    M_reopt: 3.000000
+    M_reseed: 50.000000
+    f_split: 0.990000
+    f_passive: 0.010000
+    f_stringent: 0.990000
+    f_refocus: 0.030000
+    f_redecomp: 0.030000
+    initgc: 0.500000
+    dgclamp: -25.000000
+    allow_wobble: 0
+Root time: 0.104333
+Elapsed time: 0.690784
+Domains:
+Strands:
+  - Name: legs_strand_1
+    Sequence: CGTGAACATCGGCGTGGTCGACCAACCCCACACAAAAAACCTA
+  - Name: legs_strand_2
+    Sequence: TTCCCTCTATATTTCTACACTCCCGACCACGCCGATGTTCACG
+Objectives:
+  - Name: walker
+    Normalized defect: 0.009752
+    Stop fraction: 0.010000
+    Max size: 2
+    Structures:
+      - Name: legs
+        Structure: ((((((((((((((((((((.......................+.......................))))))))))))))))))))
+        Sequence : CGTGAACATCGGCGTGGTCGACCAACCCCACACAAAAAACCTA+TTCCCTCTATATTTCTACACTCCCGACCACGCCGATGTTCACG
+        Free energy: -32.682136
+        Defect: 0.838486
+        Normalized defect: 0.009750
+        Concentration: 9.999980e-07
+        Target concentration: 1.000000e-06

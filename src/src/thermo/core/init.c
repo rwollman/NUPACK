@@ -538,7 +538,7 @@ void LoadEnergies( void) {
     "/usr/local/share/nupack",
     "/usr/share/nupack"
   };
-  int n_env_prefixes = 1;
+  int n_env_prefixes = 2;
   int n_env_suffixes = 2;
   const char *default_env_var_prefixes[] = {
     "NUPACKINSTALL",
@@ -685,6 +685,11 @@ void LoadEnergies( void) {
     token = strtok( line, " ");
     int tmp_array;
     while( token != NULL) {
+      
+      //brutal hack to fix mac platform upgrade errors
+      strerror(0);
+      strerror(1);
+
       tmp_array=0;
       if( sscanf( token, "%d", &tmp_array ) == 1) {
         array[nRead]=tmp_array;

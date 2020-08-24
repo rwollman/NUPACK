@@ -55,3 +55,15 @@ cd ../..
 cd tube-design/advanced
 ./runjobs
 cd ../..
+
+#
+# multitube-design examples
+#
+
+cd multitube-design/simple
+./runjobs
+cd ../..
+
+cd multitube-design/advanced
+./runjobs
+cd ../..

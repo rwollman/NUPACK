@@ -1,0 +1,16 @@
+% NUPACK 3.2.0
+% Program: defect
+% Start time: Mon Mar  6 23:42:20 2017
+% Command: complexdefect -T 23 -material dna -multi input/hcr-struct 
+% Sequence:  AGTCTAGGATTCGGCGTGGGTTAA+TTAACCCACGCCGAATCCTAGACTCAAAGTAGTCTAGGATTCGGCGTG+TTAACCCACGCCGAATCCTAGACTCAAAGTAGTCTAGGATTCGGCGTG+AGTCTAGGATTCGGCGTGGGTTAACACGCCGAATCCTAGACTACTTTG
+% Structure: ((((((((((((((((((((((((+))))))))))))))))))))))))((((((((((((((((((((((((+((((((((((((((((((((((((........................+))))))))))))))))))))))))))))))))))))))))))))))))
+% v(pi): 1
+% Parameters: DNA, 1998
+% Dangles setting: 1
+% Temperature (C): 23.0
+% Sodium concentration: 1.0000 M
+% Magnesium concentration: 0.0000 M
+%
+% Ensemble defect n(s,phi) and normalized ensemble defect n(s,phi)/N:
+1.024e+01
+6.096e-02

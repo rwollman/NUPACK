@@ -1,0 +1,220 @@
+general : 
+    version  : 3.2.0
+    start time    : Thu Jun  1 17:57:15 2017
+    elapsed[sec]  :   0.208588
+    input prefix  : input/dicer-defect
+physical : 
+    temperature[K]: 310.150000
+    material      : rna1999
+    sodium[M]     :   1.000000
+    magnesium[M]  :   0.000000
+    dangles       :    some
+    min_ppair     :   0.000010
+design : 
+    seed          :  586581
+    population    :       1
+    H_split       :       2
+    N_split       :      12
+    M_bad         :     300
+    M_reopt       :       3
+    M_reseed      :      50
+    f_split       :   0.990000
+    f_passive     :   0.010000
+    f_stringent   :   0.990000
+    f_redecomp    :   0.030000
+    f_refocus     :   0.030000
+    dg_clamp      : -20.000000
+    cutoff[sec]   : 86000000.000000
+    allow wobble  : false
+    add default stops   : false
+sequences:
+    domains:
+        a : GAUCCU
+        a* : AGGAUC
+        c : UUACUUCC
+        c* : GGAAGUAA
+        b : CACG
+        b* : CGUG
+        w : AU
+        w* : AU
+        y : CUAA
+        y* : UUAG
+        x : GACCUACAGAAA
+        x* : UUUCUGUAGGUC
+        z : AGC
+        z* : GCU
+        s : CACUU
+        s* : AAGUG
+    strands:
+        Cout_s : AUGACCUACAGAAACUAACACUU
+        A_s : GGAAGUAACGUGAGGAUCGCUUUAG
+        A_toe_s : GGAAGUAA
+        C_s : AUGACCUACAGAAACUAACACUUAGGAUCGCUUUAGUUUCUGUAGGUCAU
+        C_loop_s : CACUUAGGAUCGCU
+        B_s : GACCUACAGAAACUAAAGCGAUCCUCACG
+        Xs_s : GAUCCUCACGUUACUUCC
+design properties:
+    evaluation time:   0.201674
+    on-targets: 9
+    off-targets: 26
+physical results:
+  - name: -default
+    structures: 
+      - name: A_B
+        structure: ........(((((((((((((((((+............)))))))))))))))))
+        sequence:  GGAAGUAACGUGAGGAUCGCUUUAG+GACCUACAGAAACUAAAGCGAUCCUCACG
+        defect[nt]:   0.541966
+        normalized defect:   0.010036
+        target free energy[kcal/(mol K)]: -32.881351
+        target probability:   0.750506
+        complex free energy[kcal/(mol K)]: -33.058240
+      - name: C
+        structure: ((((((((((((((((((..............))))))))))))))))))
+        sequence:  AUGACCUACAGAAACUAACACUUAGGAUCGCUUUAGUUUCUGUAGGUCAU
+        defect[nt]:   3.362644
+        normalized defect:   0.067253
+        target free energy[kcal/(mol K)]: -24.400000
+        target probability:   0.072535
+        complex free energy[kcal/(mol K)]: -26.017035
+      - name: X
+        structure: ..................
+        sequence:  GAUCCUCACGUUACUUCC
+        defect[nt]:   0.344946
+        normalized defect:   0.019164
+        target free energy[kcal/(mol K)]:   0.000000
+        target probability:   0.877565
+        complex free energy[kcal/(mol K)]:  -0.080494
+      - name: B
+        structure: .............................
+        sequence:  GACCUACAGAAACUAAAGCGAUCCUCACG
+        defect[nt]:   1.750755
+        normalized defect:   0.060371
+        target free energy[kcal/(mol K)]:   0.000000
+        target probability:   0.579041
+        complex free energy[kcal/(mol K)]:  -0.336746
+      - name: C_out
+        structure: .......................
+        sequence:  AUGACCUACAGAAACUAACACUU
+        defect[nt]:   0.371890
+        normalized defect:   0.016169
+        target free energy[kcal/(mol K)]:   0.000000
+        target probability:   0.881746
+        complex free energy[kcal/(mol K)]:  -0.077565
+      - name: C_loop
+        structure: ..............
+        sequence:  CACUUAGGAUCGCU
+        defect[nt]:   0.213850
+        normalized defect:   0.015275
+        target free energy[kcal/(mol K)]:   0.000000
+        target probability:   0.912236
+        complex free energy[kcal/(mol K)]:  -0.056613
+      - name: A_toe
+        structure: ........
+        sequence:  GGAAGUAA
+        defect[nt]:   0.000000
+        normalized defect:   0.000000
+        target free energy[kcal/(mol K)]:   0.000000
+        target probability:   1.000000
+        complex free energy[kcal/(mol K)]:  -0.000000
+      - name: X_A
+        structure: ((((((((((((((((((+)))))))))))))))))).......
+        sequence:  GAUCCUCACGUUACUUCC+GGAAGUAACGUGAGGAUCGCUUUAG
+        defect[nt]:   0.059292
+        normalized defect:   0.001379
+        target free energy[kcal/(mol K)]: -35.781351
+        target probability:   0.971502
+        complex free energy[kcal/(mol K)]: -35.799170
+      - name: B_C
+        structure: (((((((((((((((((((((((((....+.......................)))))))))))))))))))))))))..
+        sequence:  GACCUACAGAAACUAAAGCGAUCCUCACG+AUGACCUACAGAAACUAACACUUAGGAUCGCUUUAGUUUCUGUAGGUCAU
+        defect[nt]:   1.364284
+        normalized defect:   0.017269
+        target free energy[kcal/(mol K)]: -48.381351
+        target probability:   0.511533
+        complex free energy[kcal/(mol K)]: -48.794498
+    tubes: 
+      - name: Crosstalk
+        defect[M nt]: 7.407245e-08
+        nucleotide conc[M nt]: 1.960000e-06
+        normalized defect:   0.037792
+        complexes: 
+          - name: A_B
+            concentration: 1.000000e-08
+            target concentration: 1.000000e-08
+          - name: C
+            concentration: 9.996633e-09
+            target concentration: 1.000000e-08
+          - name: X
+            concentration: 9.748935e-09
+            target concentration: 1.000000e-08
+          - name: B
+            concentration: 9.998405e-09
+            target concentration: 1.000000e-08
+          - name: C_out
+            concentration: 9.996847e-09
+            target concentration: 1.000000e-08
+          - name: C_loop
+            concentration: 9.745599e-09
+            target concentration: 1.000000e-08
+          - name: A_toe
+            concentration: 9.999954e-09
+            target concentration: 1.000000e-08
+      - name: Step_0
+        defect[M nt]: 4.603403e-08
+        nucleotide conc[M nt]: 1.220000e-06
+        normalized defect:   0.037733
+        complexes: 
+          - name: C
+            concentration: 9.963288e-09
+            target concentration: 1.000000e-08
+          - name: X
+            concentration: 9.999957e-09
+            target concentration: 1.000000e-08
+          - name: A_B
+            concentration: 9.965851e-09
+            target concentration: 1.000000e-08
+          - name: B
+            concentration: 2.906928e-17
+            target concentration: 0.000000e+00
+          - name: B_C
+            concentration: 3.414924e-11
+            target concentration: 0.000000e+00
+      - name: Step_1
+        defect[M nt]: 7.482816e-08
+        nucleotide conc[M nt]: 7.200000e-07
+        normalized defect:   0.103928
+        complexes: 
+          - name: X_A
+            concentration: 9.191966e-09
+            target concentration: 1.000000e-08
+          - name: B
+            concentration: 9.191532e-09
+            target concentration: 1.000000e-08
+          - name: X
+            concentration: 8.079461e-10
+            target concentration: 0.000000e+00
+          - name: A_B
+            concentration: 8.080343e-10
+            target concentration: 0.000000e+00
+      - name: Step_2
+        defect[M nt]: 1.435748e-08
+        nucleotide conc[M nt]: 7.900000e-07
+        normalized defect:   0.018174
+        complexes: 
+          - name: B_C
+            concentration: 9.990795e-09
+            target concentration: 1.000000e-08
+          - name: C
+            concentration: 9.205088e-12
+            target concentration: 0.000000e+00
+          - name: B
+            concentration: 9.205090e-12
+            target concentration: 0.000000e+00
+mean objective:   0.049407
+objectives:
+  - name: combined_objective
+    defect: 0.049407
+    satisfied: false
+    stop: 0.020000
+    type: combined
+    including: (Crosstalk, Step_0, Step_1, Step_2)

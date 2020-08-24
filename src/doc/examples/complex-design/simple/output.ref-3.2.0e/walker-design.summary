@@ -1,0 +1,33 @@
+% NUPACK 3.2.0
+% Program: design
+% Start time: Mon Mar  6 23:42:23 2017
+% Command: complexdesign -material dna -pairs -loadseed input/walker-design %
+% Structure: ((((((((((((((((((((.......................+.......................))))))))))))))))))))
+% v(pi): 1
+% Parameters: DNA, 1998
+% Dangles setting: 1
+% Temperature (C): 37.0
+% Sodium concentration: 1.0000 M
+% Magnesium concentration: 0.0000 M
+% Init mode: RANDOM
+% M_UNFAVORABLE: 4.000000
+% M_REOPT: 10
+% M_LEAFOPT: 3
+% f_STOP: 0.010000
+% Minimum split helix: 6
+% Minimum leaf size: 20
+% Design mode: N
+%
+% Elapsed time: 1.742328
+% Root evaluation time: 0.051346
+%
+% CG fraction: 0.697674
+% Pattern violations: 0
+% Target free energy: -36.331351
+% Ensemble free energy: -36.452706
+%
+% Leaf sum: 0.433089
+% MFE defect: 0.000000
+% Probability: 0.821272
+% Ensemble defect: 0.429826
+CGGGCACCGGGGTGTGGCGGACCCTTCCCTCCCCACCATTCAA+TCCCATCTTCCCCTCTACACACCCCGCCACACCCCGGTGCCCG

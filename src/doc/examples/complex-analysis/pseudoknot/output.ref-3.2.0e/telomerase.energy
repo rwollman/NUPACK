@@ -1,0 +1,20 @@
+% NUPACK 3.2.0
+% Program: energy
+% Start time: Mon Mar  6 23:42:22 2017
+% Command: energy -pseudo input/telomerase-struct 
+% NUPACK 3.2.0
+% Program: energy
+% Start time: Mon Mar  6 23:42:22 2017
+% Command: energy -pseudo input/telomerase-struct 
+% Sequence:  GGGCUGUUUUUCUCGCUGACUUUCAGCCCCAAACAAAAAAUGUCAGCA
+% Structure: ((((((........{{{{{{...))))))............}}}}}}.
+% v(pi): 1
+% Parameters: RNA, 1995
+% Dangles setting: 1
+% Temperature (C): 37.0
+% Sodium concentration: 1.0000 M
+% Magnesium concentration: 0.0000 M
+% Pseudoknots enabled.
+%
+% Energy (kcal/mol):
+-16.60000000000000

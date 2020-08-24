@@ -1,0 +1,50 @@
+Relative to NUPACK 3.0, the following changes were introduced to
+the complexes executable:
+  -ordered is on by default
+  output files .cx and .cx-epairs are not written
+  the comment lines in .ocx-epairs and .ocx-mfe employ updated terminology
+Use the -v3.0 option to revert to NUPACK 3.0 behavior.
+
+Permutation generation complete.
+Starting partition function calculations.
+Rough time estimate for calculation: 182.77 seconds
+Status: Set 1 / 37: nPerms (1)  1 / 48
+Status: Set 2 / 37: nPerms (1)  2 / 48
+Status: Set 3 / 37: nPerms (1)  3 / 48
+Status: Set 4 / 37: nPerms (1)  4 / 48
+Status: Set 5 / 37: nPerms (1)  5 / 48
+Status: Set 6 / 37: nPerms (1)  6 / 48
+Status: Set 7 / 37: nPerms (1)  7 / 48
+Status: Set 8 / 37: nPerms (1)  8 / 48
+Status: Set 9 / 37: nPerms (1)  9 / 48
+Status: Set 10 / 37: nPerms (1)  10 / 48
+Status: Set 11 / 37: nPerms (1)  11 / 48
+Status: Set 12 / 37: nPerms (1)  12 / 48
+Status: Set 13 / 37: nPerms (1)  13 / 48
+Status: Set 14 / 37: nPerms (2)  14 / 48
+Status: Set 15 / 37: nPerms (1)  16 / 48
+Status: Set 16 / 37: nPerms (1)  17 / 48
+Status: Set 17 / 37: nPerms (1)  18 / 48
+Status: Set 18 / 37: nPerms (1)  19 / 48
+Status: Set 19 / 37: nPerms (1)  20 / 48
+Status: Set 20 / 37: nPerms (1)  21 / 48
+Status: Set 21 / 37: nPerms (1)  22 / 48
+Status: Set 22 / 37: nPerms (1)  23 / 48
+Status: Set 23 / 37: nPerms (2)  24 / 48
+Status: Set 24 / 37: nPerms (3)  26 / 48
+Status: Set 25 / 37: nPerms (2)  29 / 48
+Status: Set 26 / 37: nPerms (1)  31 / 48
+Status: Set 27 / 37: nPerms (3)  32 / 48
+Status: Set 28 / 37: nPerms (3)  35 / 48
+Status: Set 29 / 37: nPerms (1)  38 / 48
+Status: Set 30 / 37: nPerms (1)  39 / 48
+Status: Set 31 / 37: nPerms (1)  40 / 48
+Status: Set 32 / 37: nPerms (2)  41 / 48
+Status: Set 33 / 37: nPerms (1)  43 / 48
+Status: Set 34 / 37: nPerms (1)  44 / 48
+Status: Set 35 / 37: nPerms (2)  45 / 48
+Status: Set 36 / 37: nPerms (1)  47 / 48
+Status: Set 37 / 37: nPerms (1)  48 / 48
+Total number of terms calculated: 48 (48)
+Calculation finished on: Mon Mar  6 23:42:53 2017
+
