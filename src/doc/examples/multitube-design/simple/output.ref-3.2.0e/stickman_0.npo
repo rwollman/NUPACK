@@ -1,0 +1,68 @@
+general : 
+    version  : 3.2.0
+    start time    : Thu Jun  1 17:56:57 2017
+    elapsed[sec]  :   7.085704
+    input prefix  : input/stickman
+physical : 
+    temperature[K]: 296.150000
+    material      : rna1995
+    sodium[M]     :   1.000000
+    magnesium[M]  :   0.000000
+    dangles       :    some
+    min_ppair     :   0.000010
+design : 
+    seed          :      93
+    population    :       1
+    H_split       :       2
+    N_split       :      12
+    M_bad         :     300
+    M_reopt       :       3
+    M_reseed      :      50
+    f_split       :   0.990000
+    f_passive     :   0.010000
+    f_stringent   :   0.990000
+    f_redecomp    :   0.030000
+    f_refocus     :   0.030000
+    dg_clamp      : -20.000000
+    cutoff[sec]   : 86000000.000000
+    allow wobble  : false
+    add default stops   : false
+sequences:
+    domains:
+        a : CUGAACUCUCUUGGAUAGGACAUCAUC
+        a* : GAUGAUGUCCUAUCCAAGAGAGUUCAG
+        b : GAUGUCGUCAACCCCCCCGACCCGGCCGU
+        b* : ACGGCCGGGUCGGGGGGGUUGACGACAUC
+        c : AGGCCGGCUAUCCUUGGGAUGUCCA
+        c* : UGGACAUCCCAAGGAUAGCCGGCCU
+        d : AGACAUCCCGAGAGUUCU
+        d* : AGAACUCUCGGGAUGUCU
+    strands:
+        a strand : CUGAACUCUCUUGGAUAGGACAUCAUC
+        b strand : GAUGUCGUCAACCCCCCCGACCCGGCCGU
+        c strand : AGGCCGGCUAUCCUUGGGAUGUCCA
+        d strand : AGACAUCCCGAGAGUUCU
+design properties:
+    evaluation time:   0.073708
+    on-targets: 1
+    off-targets: 0
+physical results:
+  - name: -default
+    structures: 
+      - name: stickman
+        structure: ..((((((((..((((((((((((...+))))))(((.........)))((((((..+.))))))))))))..((((((((..+.)))))))))))))))).
+        sequence:  CUGAACUCUCUUGGAUAGGACAUCAUC+GAUGUCGUCAACCCCCCCGACCCGGCCGU+AGGCCGGCUAUCCUUGGGAUGUCCA+AGACAUCCCGAGAGUUCU
+        defect[nt]:   0.968971
+        normalized defect:   0.009788
+        target free energy[kcal/(mol K)]: -68.613989
+        target probability:   0.591639
+        complex free energy[kcal/(mol K)]: -68.922868
+    tubes: []
+mean objective:   0.009788
+objectives:
+  - name: combined_objective
+    defect: 0.009788
+    satisfied: true
+    stop: 0.010000
+    type: combined
+    including: (stickman)

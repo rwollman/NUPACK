@@ -51,7 +51,21 @@ Version 3.0.5 (January 22, 2015):
 Version 3.0.6 (May 13, 2016):
   * Fixed bug with "--dangles all" setting in partition function code
     
-Version 3.1.0 (February 22, 2017)
+Version 3.1 (February 22, 2017):
   * Inclusion of "tubedesign" and "tubedefect" executables for 
     test tube design   
   * Change from Unix Makefiles to CMake
+
+Version 3.2 (March 5, 2017):
+  * Inclusion of "multitubedesign" and "multitubedefect" executables 
+    implementing constrained multistate test tube design for 
+    reaction pathway engineering
+
+Version 3.2.1 (July 6, 2017):
+  * Inclusion of sample executable
+
+Version 3.2.2 (November 20, 2017):
+  * Fix to maxopttime checking in multitubedesign to allow more robust
+    early stopping on large designs
+  * Standardization of checks for floating-point precision loss in
+    pair probabilities calculation

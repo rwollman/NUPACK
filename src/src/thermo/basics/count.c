@@ -67,7 +67,7 @@ int main( int argc, char *argv[] ) {
         COMMENT_STRING);
   printf( "%14.14Le\n", (long double) pf); 
  
-  return 1;
+  return 0;
 }
 /* ****** */
 

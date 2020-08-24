@@ -1,0 +1,61 @@
+NUPACK version: 3.2.0
+Backend: tubedefect
+Design index: 0
+Options: 
+    temperature: 296.150000
+    material: dna1998
+    sodium: 1.000000
+    magnesium: 0.000000
+    dangle_type: 1
+    use_long_helix: 0
+    allow_wobble: 0
+Elapsed time: 1.148486
+Domains:
+  - Name: a
+    Sequence: GGTCTA
+  - Name: a*
+    Sequence: TAGACC
+  - Name: b
+    Sequence: CCGCACCCTCTTCTTCGC
+  - Name: b*
+    Sequence: GCGAAGAAGAGGGTGCGG
+  - Name: c
+    Sequence: TACAAT
+  - Name: c*
+    Sequence: ATTGTA
+Strands:
+  - Name: I
+    Sequence: GCGAAGAAGAGGGTGCGGTAGACC
+  - Name: A
+    Sequence: GGTCTACCGCACCCTCTTCTTCGCATTGTAGCGAAGAAGAGGGTGCGG
+  - Name: B
+    Sequence: GCGAAGAAGAGGGTGCGGTAGACCCCGCACCCTCTTCTTCGCTACAAT
+Objectives:
+  - Name: HCR
+    Normalized defect: 0.019175
+    Max size: 3
+    Structures:
+      - Name: monomer1
+        Structure: ......((((((((((((((((((......))))))))))))))))))
+        Sequence : GGTCTACCGCACCCTCTTCTTCGCATTGTAGCGAAGAAGAGGGTGCGG
+        Free energy: -30.824835
+        Defect: 0.147021
+        Normalized defect: 0.003063
+        Concentration: 1.000435e-06
+        Target concentration: 1.000000e-06
+      - Name: monomer2
+        Structure: ((((((((((((((((((......))))))))))))))))))......
+        Sequence : GCGAAGAAGAGGGTGCGGTAGACCCCGCACCCTCTTCTTCGCTACAAT
+        Free energy: -29.974809
+        Defect: 0.217123
+        Normalized defect: 0.004523
+        Concentration: 1.006682e-06
+        Target concentration: 1.000000e-06
+      - Name: polymer
+        Structure: ((((((((((((((((((((((((((((((((((((((((((((((((+........................))))))))))))))))))))))))+))))))))))))))))))))))))
+        Sequence : GGTCTACCGCACCCTCTTCTTCGCATTGTAGCGAAGAAGAGGGTGCGG+GCGAAGAAGAGGGTGCGGTAGACCCCGCACCCTCTTCTTCGCTACAAT+GCGAAGAAGAGGGTGCGGTAGACC
+        Free energy: -87.325007
+        Defect: 9.610705
+        Normalized defect: 0.080089
+        Concentration: 9.324543e-08
+        Target concentration: 1.000000e-07

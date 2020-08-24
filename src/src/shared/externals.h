@@ -18,6 +18,12 @@ extern "C" {
 #endif /* __cplusplus */
 
 
+#ifdef NUPACK_SAMPLE
+extern int nupack_sample;
+extern int nupack_num_samples;
+extern char ** nupack_sample_list;
+extern int nupack_random_seed;
+#endif // NUPACK_SAMPLE
 
 extern int NUPACK_VALIDATE;
 extern int mfe_sort_method; // A constant to allow forced sort-by-structure

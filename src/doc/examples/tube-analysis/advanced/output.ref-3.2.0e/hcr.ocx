@@ -1,0 +1,71 @@
+% NUPACK 3.2.0
+% Program: complexes
+% Start time: Mon Mar  6 23:42:33 2017 PST
+%
+% Command: complexes -T 23 -material dna -pairs -mfe -degenerate input/hcr 
+% Maximum complex size to enumerate: 4
+% Number of complexes from enumeration: 44
+% Additional complexes from .list file: 4
+% Total number of complexes: 48
+% Parameters: DNA, 1998
+% Dangles setting: 1
+% Temperature (C): 23.0
+% Sodium concentration: 1.0000 M
+% Magnesium concentration: 0.0000 M
+%
+% Do not change the comments below this line, as they may be read by other programs!
+%
+% Number of strands: 3
+% id sequence
+%  1 AGTCTAGGATTCGGCGTGGGTTAA
+%  2 TTAACCCACGCCGAATCCTAGACTCAAAGTAGTCTAGGATTCGGCGTG
+%  3 AGTCTAGGATTCGGCGTGGGTTAACACGCCGAATCCTAGACTACTTTG
+% T = 23.0
+1	1	1	0	0	-7.87585320e-01
+2	1	0	1	0	-2.77229511e+01
+3	1	0	0	1	-2.80354395e+01
+4	1	2	0	0	-1.07109347e+01
+5	1	1	1	0	-4.15225790e+01
+6	1	1	0	1	-3.42779194e+01
+7	1	0	2	0	-5.88918294e+01
+8	1	0	1	1	-5.91190488e+01
+9	1	0	0	2	-6.04508699e+01
+10	1	3	0	0	-1.86535120e+01
+11	1	2	1	0	-5.21814376e+01
+12	1	2	0	1	-4.46710992e+01
+13	1	1	2	0	-7.44330886e+01
+14	1	1	1	1	-8.17640179e+01
+14	2	1	1	1	-7.10190272e+01
+15	1	1	0	2	-6.76235463e+01
+16	1	0	3	0	-9.00673131e+01
+17	1	0	2	1	-9.04005684e+01
+18	1	0	1	2	-9.19265778e+01
+19	1	0	0	3	-9.22563355e+01
+20	1	4	0	0	-2.88102348e+01
+21	1	3	1	0	-6.00477161e+01
+22	1	3	0	1	-5.27376513e+01
+23	1	2	2	0	-8.53462065e+01
+23	2	2	2	0	-9.28574307e+01
+24	1	2	1	1	-8.58158470e+01
+24	2	2	1	1	-8.16781270e+01
+24	3	2	1	1	-9.21079593e+01
+25	1	2	0	2	-7.80330131e+01
+25	2	2	0	2	-7.78258974e+01
+26	1	1	3	0	-1.07071120e+02
+27	1	1	2	1	-1.21970714e+02
+27	2	1	2	1	-1.10597004e+02
+27	3	1	2	1	-1.03937853e+02
+28	1	1	1	2	-1.15361918e+02
+28	2	1	1	2	-1.11260370e+02
+28	3	1	1	2	-1.03822134e+02
+29	1	1	0	3	-1.00871595e+02
+30	1	0	4	0	-1.21307854e+02
+31	1	0	3	1	-1.21807477e+02
+32	1	0	2	2	-1.23769021e+02
+32	2	0	2	2	-1.22623345e+02
+33	1	0	1	3	-1.23862201e+02
+34	1	0	0	4	-1.24753845e+02
+35	1	1	2	2	-1.62212153e+02
+35	2	1	2	2	-1.51403903e+02
+36	1	0	3	2	-1.54321947e+02
+37	1	1	3	2	-2.02418847e+02

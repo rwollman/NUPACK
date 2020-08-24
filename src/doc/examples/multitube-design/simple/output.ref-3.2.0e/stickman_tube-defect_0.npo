@@ -1,0 +1,76 @@
+general : 
+    version  : 3.2.0
+    start time    : Thu Jun  1 17:56:56 2017
+    elapsed[sec]  :   0.474186
+    input prefix  : input/stickman_tube-defect
+physical : 
+    temperature[K]: 296.150000
+    material      : rna1995
+    sodium[M]     :   1.000000
+    magnesium[M]  :   0.000000
+    dangles       :    some
+    min_ppair     :   0.000010
+design : 
+    seed          :      93
+    population    :       1
+    H_split       :       2
+    N_split       :      12
+    M_bad         :     300
+    M_reopt       :       3
+    M_reseed      :      50
+    f_split       :   0.990000
+    f_passive     :   0.010000
+    f_stringent   :   0.990000
+    f_redecomp    :   0.030000
+    f_refocus     :   0.030000
+    dg_clamp      : -20.000000
+    cutoff[sec]   : 86000000.000000
+    allow wobble  : false
+    add default stops   : false
+sequences:
+    domains:
+        a : ACCUCCAAGCACAACUGUGGCCCCAUA
+        a* : UAUGGGGCCACAGUUGUGCUUGGAGGU
+        b : GGGGCCGGAUUACAACUUUCCCUGUGAAC
+        b* : GUUCACAGGGAAAGUUGUAAUCCGGCCCC
+        c : AUCACAGACAGUUAACCACUUGAGG
+        c* : CCUCAAGUGGUUAACUGUCUGUGAU
+        d : AUCAAGUGGGCUUGGAGC
+        d* : GCUCCAAGCCCACUUGAU
+    strands:
+        left : ACCUCCAAGCACAACUGUGGCCCCAUA
+        top : GGGGCCGGAUUACAACUUUCCCUGUGAAC
+        right : AUCACAGACAGUUAACCACUUGAGG
+        bottom : AUCAAGUGGGCUUGGAGC
+design properties:
+    evaluation time:   0.473042
+    on-targets: 1
+    off-targets: 38
+physical results:
+  - name: -default
+    structures: 
+      - name: stickfigure
+        structure: ..((((((((..((((((((((((...+))))))(((.........)))((((((..+.))))))))))))..((((((((..+.)))))))))))))))).
+        sequence:  ACCUCCAAGCACAACUGUGGCCCCAUA+GGGGCCGGAUUACAACUUUCCCUGUGAAC+AUCACAGACAGUUAACCACUUGAGG+AUCAAGUGGGCUUGGAGC
+        defect[nt]:   1.651341
+        normalized defect:   0.016680
+        target free energy[kcal/(mol K)]: -67.389323
+        target probability:   0.427655
+        complex free energy[kcal/(mol K)]: -67.889218
+    tubes: 
+      - name: figuretube
+        defect[M nt]: 1.837337e-06
+        nucleotide conc[M nt]: 9.900000e-05
+        normalized defect:   0.018559
+        complexes: 
+          - name: stickfigure
+            concentration: 9.980894e-07
+            target concentration: 1.000000e-06
+mean objective:   0.018559
+objectives:
+  - name: combined_objective
+    defect: 0.018559
+    satisfied: true
+    stop: 0.020000
+    type: combined
+    including: (figuretube)

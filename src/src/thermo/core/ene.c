@@ -128,6 +128,8 @@ DBL_TYPE HairpinEnergy( int i, int j, int seq[] ) {
     if( polyC == TRUE) {
       energy += POLYC3;
     }
+    
+    return energy;
   }
   else if (size == 4) {
 
@@ -138,32 +140,19 @@ DBL_TYPE HairpinEnergy( int i, int j, int seq[] ) {
       4*(  ( seq[j - 1]) - 1) +
       1*(  ( seq[j])- 1);
     energy +=  tloop_energy[ tloopnumber];
-
-    //Next do mismatches.
-    cp_shift = GetMismatchShift( seq[i], seq[j]);
-
-    energy += MMEnergiesHP[(4*(( seq[i + 1]) - 1) +
-                            (( seq[j - 1]) - 1) )*6
-                           + cp_shift];
-    //Poly-C loop
-    if( polyC == TRUE) {
-      energy += POLYCSLOPE*size + POLYCINT;
-    }
   }
+  
+  cp_shift = GetMismatchShift( seq[i], seq[j]);
 
-  else if (size > 4) {
-    // Calculate mismatch
-    cp_shift = GetMismatchShift( seq[i], seq[j]);
+  energy += MMEnergiesHP[(4*(( seq[i + 1]) - 1) +
+                          (( seq[j - 1]) - 1) )*6
+                         + cp_shift];
 
-    energy += MMEnergiesHP[(4*(( seq[i + 1]) - 1) +
-                            (( seq[j - 1]) - 1) )*6
-                           + cp_shift];
-
-    //Poly-C loop
-    if( polyC == TRUE) {
-      energy += POLYCSLOPE*size + POLYCINT;
-    }
+  //Poly-C loop
+  if( polyC == TRUE) {
+    energy += POLYCSLOPE*size + POLYCINT;
   }
+  
   return energy;
 }
 

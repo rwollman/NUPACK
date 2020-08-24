@@ -3,13 +3,13 @@ project(NUPACKCORE)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
-set(NUPACK_VERSION 3.1.0)
+set(NUPACK_VERSION 3.2.2)
 add_definitions(-DCMAKE_NUPACK_VERSION="${NUPACK_VERSION}")
 
 
 # Packaging Binary and Source
 set(CPACK_PACKAGE_VERSION_MAJOR 3)
-set(CPACK_PACKAGE_VERSION_MINOR 1)
+set(CPACK_PACKAGE_VERSION_MINOR 2)
 set(CPACK_PACKAGE_VERSION_PATCH 0)
 set(CPACK_SOURCE_GENERATOR "TGZ")
 set(CPACK_PACKAGE_DIRECTORY "${PROJECT_BINARY_DIR}/cpack")
@@ -32,16 +32,7 @@ endif()
 
 ########################################
 # Selection options
-option(MPI "MPI" OFF)
 option(SAMPLE "SAMPLE" ON)
-option(KINETICS "KINETICS" OFF)
-option(CATCH "Build catch executables" OFF)
-option(BISONFLEX "Use system Flex and Bison to rebuild parser/lexer" OFF)
-
-if(BISONFLEX)
-    find_package(BISON 2.7.0)
-    find_package(FLEX 2.5.33)
-endif()
 
 ########################################
 # Location options
@@ -53,7 +44,6 @@ set(BIN_DIR bin)
 set(INCLUDE_DIRS
     extlib
     src
-    ${MPI_C_INCLUDE_PATH}
 )
 
 ########################################
@@ -65,27 +55,39 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${TEMP_LIB_DIR})
 # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -Wall -O0 -fno-omit-frame-pointer -fsanitize=address")
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -Wall")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -Wall -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g")
 
-#endif NUPACK_STRIP
+if(CMAKE_C_COMPILER MATCHES "clang")
+message("-- using Clang Compiler")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -g")
+endif(CMAKE_C_COMPILER MATCHES "clang")
+
+if(CMAKE_CXX_COMPILER MATCHES "clang")
+message("-- using Clang++ Compiler")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+endif(CMAKE_CXX_COMPILER MATCHES "clang")
+
+check_cxx_compiler_flag("-std=c++11" HAS_CXX11)
+check_cxx_compiler_flag("-std=c++0x" HAS_CXX0X)
+
+if (HAS_CXX11)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+elseif (HAS_CXX0X)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+else (HAS_CXX11)
+    message("Compiler doesn't support -std=c++0x or -std=c++11")
+    message("Some features may not build correctly")
+endif (HAS_CXX11)
 
 # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-no_pie -lc")
 
 # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -Wall -O0 -fno-omit-frame-pointer")
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -fno-omit-frame-pointer")
 
-# Include MPI code
-if(MPI)
-    message("Configuring with MPI")
-    find_package(MPI)
-    add_definitions(-DNUPACK_MPI)
-endif(MPI)
-
 if(SAMPLE)
     add_definitions(-DNUPACK_SAMPLE)
 endif(SAMPLE)
-
 
 set(CLANG_ASAN "")
 
@@ -100,11 +102,19 @@ message("-- Found jsoncpp include directory: " ${JSONCPP_INCLUDE_DIR})
 include_directories(BEFORE ${INCLUDE_DIRS})
 link_directories(${TEMP_LIB_DIR})
 
-find_library(MATH_LIB NAMES libm.a)
+find_library(MATH_LIB NAMES libm m)
+if(MATH_LIB)
+    message("-- MATH_LIB is ${MATH_LIB}")
+else()
+    message("-- MATH_LIB not found. Using -lm linker flag.")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lm")
+    set(MATH_LIB "")
+endif()
 
 # Configure NUPACK_VERSION using Git if it's available
+
 find_package(Git)
-if(GIT_FOUND)
+if(GIT_FOUND AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
     message("-- Found Git")
     
     execute_process(COMMAND ${GIT_EXECUTABLE} describe --tags
@@ -119,7 +129,7 @@ if(GIT_FOUND)
         set(NUPACK_VERSION "${GIT_REVISION}")
     endif(FOUND_REVISION EQUAL 0)
     
-endif(GIT_FOUND)
+endif(GIT_FOUND AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
 message(STATUS "Building version ${NUPACK_VERSION}")
 
 ########################################

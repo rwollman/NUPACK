@@ -12,6 +12,7 @@
 */
 
 #include "shared/constants.h"
+#include "shared/nupack_design_constants.h"
 #include "shared/externals.h"
 #include "shared/functions.h"
 #include "shared/hash.h"

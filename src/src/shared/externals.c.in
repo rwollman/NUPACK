@@ -15,6 +15,12 @@ extern "C" {
 
 
 
+#ifdef NUPACK_SAMPLE
+int nupack_sample;
+int nupack_num_samples;
+char ** nupack_sample_list;
+int nupack_random_seed;
+#endif // NUPACK_SAMPLE
 
 int NUPACK_VALIDATE;
 int mfe_sort_method; // A constant to allow forced sort-by-structure

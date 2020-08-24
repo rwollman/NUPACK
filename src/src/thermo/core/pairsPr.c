@@ -84,6 +84,15 @@ void calculatePairsN3( DBL_TYPE *Q, DBL_TYPE *Qb, DBL_TYPE *Qm, DBL_TYPE *Qms,
   float *preX, *preX_1, *preX_2;
   int iMin, iMax;
 
+#ifdef NUPACK_SAMPLE
+  samplingGlobals.pq = samplingGlobals.pqb = samplingGlobals.pqm = 
+    samplingGlobals.pqs = samplingGlobals.pqms = samplingGlobals.pqx = 0.0;
+  samplingGlobals.Zq = samplingGlobals.Zqb = samplingGlobals.Zqm = 
+    samplingGlobals.pqs = samplingGlobals.Zqms = samplingGlobals.Zqx = 0.0;
+
+  samplingGlobals.pqset = samplingGlobals.pqbset = samplingGlobals.pqmsset = 0;
+  samplingGlobals.pqmset = samplingGlobals.pqxset = samplingGlobals.pqsset = 0;
+#endif // NUPACK_SAMPLE
 
   Px = Px_1 = Px_2 = NULL;
   preX = preX_1 = preX_2 = NULL;
@@ -99,6 +108,31 @@ void calculatePairsN3( DBL_TYPE *Q, DBL_TYPE *Qb, DBL_TYPE *Qm, DBL_TYPE *Qms,
     iMin = 0; iMax = seqlength - L;
 
     for( i = iMin; i <= iMax ; i++) {
+#ifdef NUPACK_SAMPLE
+      if(nupack_sample) {
+        samplingGlobals.Zq =(DBL_TYPE) genrand_res53();
+        samplingGlobals.Zqb =(DBL_TYPE) genrand_res53() ;
+        samplingGlobals.Zqm = (DBL_TYPE) genrand_res53();
+        samplingGlobals.Zqms = (DBL_TYPE) genrand_res53();
+        samplingGlobals.Zqx = (DBL_TYPE) genrand_res53();
+        samplingGlobals.Zqs = (DBL_TYPE) genrand_res53();
+
+
+        samplingGlobals.pq = 0;
+        samplingGlobals.pqb = 0;
+        samplingGlobals.pqm = 0;
+        samplingGlobals.pqms = 0;
+        samplingGlobals.pqx = 0;
+        samplingGlobals.pqs = 0;
+
+        samplingGlobals.pqset = 0;
+        samplingGlobals.pqbset = 0;
+        samplingGlobals.pqmset = 0;
+        samplingGlobals.pqmsset = 0;
+        samplingGlobals.pqxset = 0;
+        samplingGlobals.pqsset = 0;
+      }
+#endif // NUPACK_SAMPLE
 
       j = i + L - 1;
       pf_ij = pf_index(i, j, seqlength);
@@ -139,7 +173,8 @@ void calculatePairsN3( DBL_TYPE *Q, DBL_TYPE *Qb, DBL_TYPE *Qm, DBL_TYPE *Qms,
       for ( j = 0; j <= seqlength - 1; j++) {
         if( i <= j) {
           rowsum += Pb[  pf_index(i, j, seqlength)];
-          if( Pb[ pf_index(i,j,seqlength)] > 1.0 + 1e-12) {
+          if( Pb[ pf_index(i,j,seqlength)] > 1.0 + NUM_PRECISION) {
+            printf("Numerical precision loss in pairsPr.c\n");
             printf("P(%d,%d) = %Le !!\n", i, j, (long double) Pb[ pf_index(i,j,seqlength)]);
           }
         }
@@ -148,7 +183,8 @@ void calculatePairsN3( DBL_TYPE *Q, DBL_TYPE *Qb, DBL_TYPE *Qm, DBL_TYPE *Qms,
         }
       }
   
-      if( rowsum > 1+1e-15) {
+      if( rowsum > 1.0 + NUM_PRECISION) {
+        printf("Numerical precision loss in pairsPr.c\n");
         printf( "rs: %d %.16Le\n", i, (long double) rowsum);
         printf("Error!!!! %d\n", seq[0]);
         exit(1);
@@ -309,10 +345,23 @@ void prFastILoops( int i, int j, int L, int seqlength, int seq[],
                            seq[j-1])/(kB*TEMP_K))/ Qb[ pf_ij];
 
       oldValue = Px[ fbix];
+#ifdef NUPACK_SAMPLE
+      if(!nupack_sample) {
+#endif // NUPACK_SAMPLE
       Px[ fbix] += pr;
+#ifdef NUPACK_SAMPLE
+      } else {
+        samplingGlobals.pqb += pr;
+        if(!samplingGlobals.pqbset && samplingGlobals.pqb >= samplingGlobals.Zqb) {
+          samplingGlobals.pqbset = 1;
+          Px[fbix] = 1;
+        }
+      }
+#endif
 
 
-      if( (pr > 1 + 1e-15 ) ) {
+      if( (pr > 1.0 + NUM_PRECISION ) ) {
+        printf("Numerical precision loss in pairsPr.c\n");
         printf("Error in precision due to subtractions!: ");
         printf("6 %Le %d %d %d\n", (long double) pr, i, j, seq[0]);
         exit(1);
@@ -343,17 +392,40 @@ void prFastILoops( int i, int j, int L, int seqlength, int seq[],
         pf_de = pf_index(d,e,seqlength);
         if( Qx[ fbix] > 0) {
 
-          if( (pr > 1 + 1e-15 ) ) {
+          if( (pr > 1.0 + NUM_PRECISION ) ) {
+            printf("Numerical precision loss in pairsPr.c\n");
             printf("6a! %Le\n", (long double) Px[ fbix]);
           }
 
           pr = Px[ fbix ] *
             EXP_FUNC(-energy/(kB*TEMP_K))*Qb[ pf_de] / Qx[ fbix];
+#ifdef NUPACK_SAMPLE
+          if(!nupack_sample) {
+#endif
             Pb[ pf_de] += pr;
             Px[ fbix] -= pr;
+#ifdef NUPACK_SAMPLE
+          } else {
+            samplingGlobals.pqx += pr;
+            if( (pr > 1.0 + NUM_PRECISION ) ) {
+              printf("Numerical precision loss in pairsPr.c\n");
+              printf("8! Px[fbix] = %Le\n", (long double) Px[ fbix]);
+              printf("pr - 1 = %Le  energy = %Le  Qb[pf_de] = %Le  Qx[fbix] = %Le \n",pr - 1.0, energy,Qb[pf_de] ,Qx[fbix]);
+              exit(1);
+            }
+            pr = 0;
+
+            if(!samplingGlobals.pqxset && samplingGlobals.pqx >= samplingGlobals.Zqx) {
+              samplingGlobals.pqxset = 1;
+              Pb[pf_de] = 1;
+              Px[fbix] = 0;
+            }
+          }
+#endif
 
 
-          if( (pr > 1 + 1e-15 ) ) {
+          if( (pr > 1.0 + NUM_PRECISION ) ) {
+            printf("Numerical precision loss in pairsPr.c\n");
             printf("7\n");
             exit(1);
           }
@@ -394,19 +466,49 @@ void prFastILoops( int i, int j, int L, int seqlength, int seq[],
         if( Qx[ fbix] > 0) {
 
 
-          if( (pr > 1 + 1e-15 ) ) {
+          if( (pr > 1.0 + NUM_PRECISION ) ) {
+            printf("Numerical precision loss in pairsPr.c\n");
             printf("7a! %Le\n", (long double) Px[ fbix]);
           }
 
 
           pr = ((Px[ fbix ] *
             (EXP_FUNC(-energy/(kB*TEMP_K))))*Qb[ pf_de]) / Qx[ fbix];
+          #ifdef NUPACK_SAMPLE
+          if(!nupack_sample) {
+          #endif // NUPACK_SAMPLE
             Pb[ pf_de] += pr;
             Px[ fbix] -= pr;
+          #ifdef NUPACK_SAMPLE
+          } else {
+            samplingGlobals.pqx += pr;
+            if( (pr > 1.0 + NUM_PRECISION ) ) {
+              printf("Numerical precision loss in pairsPr.c\n");
+              printf("8! Px[fbix] = %Le\n", (long double) Px[ fbix]);
+              printf("pr - 1 = %Le  energy = %Le  Qb[pf_de] = %Le  Qx[fbix] = %Le \n",pr - 1.0, energy,Qb[pf_de] ,Qx[fbix]);
+              exit(1);
+            }
+            pr = 0;
+
+            if( (pr > 1.0 + NUM_PRECISION ) ) {
+              printf("Numerical precision loss in pairsPr.c\n");
+              printf("8! Px[fbix] = %Le\n", (long double) Px[ fbix]);
+              printf("pr - 1 = %Le  energy = %Le  Qb[pf_de] = %Le  Qx[fbix] = %Le \n",pr - 1.0, energy,Qb[pf_de] ,Qx[fbix]);
+              exit(1);
+            }
+            pr = 0;
+            if(!samplingGlobals.pqxset && samplingGlobals.pqx >= samplingGlobals.Zqx) {
+              samplingGlobals.pqxset = 1;
+              Pb[pf_de] = 1;
+              Px[fbix] = 0;
+            }
+          }
+          #endif //NUPACK_SAMPLE
 
 
 
-          if( (pr > 1 + 1e-15 ) ) {
+          if( (pr > 1.0 + NUM_PRECISION ) ) {
+            printf("Numerical precision loss in pairsPr.c\n");
             printf("8! Px[fbix] = %Le\n", (long double) Px[ fbix]);
             printf("pr - 1 = %Le  energy = %Le  Qb[pf_de] = %Le  Qx[fbix] = %Le \n",pr - 1.0, energy,Qb[pf_de] ,Qx[fbix]);
             exit(1);
@@ -481,9 +583,22 @@ void smallInteriorLoop( int pf_ij, int seq[], int seqlength, int i, int j,
         Qb[ pf_de] * Qb_bonus[pf_ij] / Qb[ pf_ij];
 
       //printf("%i %i %i %i %i %Le %Le %Le\n",i,j,d,e,samplingGlobals.pqbset,samplingGlobals.pqb,samplingGlobals.Zqb,(long double)pr);
+      #ifdef NUPACK_SAMPLE
+      if(!nupack_sample) {
+      #endif // NUPACK_SAMPLE
         Pb[ pf_de] += pr;
+      #ifdef NUPACK_SAMPLE
+      } else {
+        samplingGlobals.pqb += pr;
+        if(!samplingGlobals.pqbset && samplingGlobals.pqb >= samplingGlobals.Zqb) {
+          samplingGlobals.pqbset = 1;
+          Pb[pf_de] = 1;
+        }
+      }
+      #endif // NUPACK_SAMPLE
 
-      if( (pr > 1 + 1e-15 ) ) {
+      if( (pr > 1.0 + NUM_PRECISION ) ) {
+        printf("Numerical precision loss in pairsPr.c\n");
         printf("%d %d %d %d %d %Le %Le %Le %Le\n",
                error, i,d,e,j,
                (long double) Pb[ pf_ij],
@@ -653,9 +768,23 @@ void MakeP_Pm_N3( int i, int j, int seq[], int seqlength,
         pr = P[ pf_ij]*Q[ pf_id1] *
           Qs[ pf_dj]/Q[ pf_ij];
 
+#ifdef NUPACK_SAMPLE
+        if(!nupack_sample) {
+#endif // NUPACK_SAMPLE
           P[pf_id1] += pr;
           Ps[pf_dj] += pr;
-        if( (pr > 1 + 1e-15 ) ) {
+#ifdef NUPACK_SAMPLE
+        } else {
+          samplingGlobals.pq += pr;
+          if(!samplingGlobals.pqset && samplingGlobals.pq >= samplingGlobals.Zq) {
+            samplingGlobals.pqset = 1;
+            P[pf_id1] = 1;
+            Ps[pf_dj] = 1;
+          }
+        }
+#endif // NUPACK_SAMPLE
+        if( (pr > 1.0 + NUM_PRECISION ) ) {
+          printf("Numerical precision loss in pairsPr.c\n");
           printf("9\n");
           exit(1);
         }
@@ -672,8 +801,21 @@ void MakeP_Pm_N3( int i, int j, int seq[], int seqlength,
           if( Qm[ pf_ij] > 0) {
             pr = Pm[ pf_ij]*Qms[ pf_dj] *
               extraTerms/Qm[pf_ij]; //Single Pair
+#ifdef NUPACK_SAMPLE
+            if( !nupack_sample) {
+#endif // NUPACK_SAMPLE
               Pms[ pf_dj] += pr;
-            if( (pr > 1 + 1e-15 ) ) {
+#ifdef NUPACK_SAMPLE
+            } else {
+              samplingGlobals.pqm += pr;
+              if(!samplingGlobals.pqmset && samplingGlobals.pqm >= samplingGlobals.Zqm) {
+                samplingGlobals.pqmset = 1;
+                Pms[pf_dj] = 1;
+              }
+            }
+#endif
+            if( (pr > 1.0 + NUM_PRECISION ) ) {
+              printf("Numerical precision loss in pairsPr.c\n");
               printf("10\n");
               exit(1);
             }
@@ -685,10 +827,24 @@ void MakeP_Pm_N3( int i, int j, int seq[], int seqlength,
             pr = Pm[ pf_ij]*Qm[ pf_id1 ] *
               Qms[ pf_dj ]/Qm[ pf_ij];
            
+#ifdef NUPACK_SAMPLE
+            if( !nupack_sample) {
+#endif // NUPACK_SAMPLE
               Pm[ pf_id1] += pr;
               Pms[ pf_dj] += pr;
+#ifdef NUPACK_SAMPLE
+            } else {
+              samplingGlobals.pqm += pr;
+              if(!samplingGlobals.pqmset && samplingGlobals.pqm >= samplingGlobals.Zqm) {
+                samplingGlobals.pqmset = 1;
+                Pm[pf_id1] = 1;
+                Pms[pf_dj] = 1;
+              }
+            }
+#endif // NUPACK_SAMPLE
 
-            if( (pr > 1 + 1e-15 ) ) {
+            if( (pr > 1.0 + NUM_PRECISION ) ) {
+              printf("Numerical precision loss in pairsPr.c\n");
               printf("11\n");
               exit(1);
             }
@@ -749,9 +905,22 @@ void MakePs_Pms( int i, int j, int seq[], int seqlength,
 
         //printf("%i %i %i %Le %Le %Le\n", i, j, d, (long double) pr, (long double) samplingGlobals.pqs, (long double) samplingGlobals.Zqs);
         
+        #ifdef NUPACK_SAMPLE
+        if(!nupack_sample) {
+        #endif // NUPACK_SAMPLE
           Pb[ pf_id] += pr;
+        #ifdef NUPACK_SAMPLE
+        } else {
+          samplingGlobals.pqs += pr;
+          if(!samplingGlobals.pqsset && samplingGlobals.pqs >= samplingGlobals.Zqs) {
+            samplingGlobals.pqsset = 1;
+            Pb[pf_id] = 1;
+          }
+        }
+        #endif // NUPACK_SAMPLE
 
-        if( (pr > 1 + 1e-15 ) ) {
+        if( (pr > 1.0 + NUM_PRECISION ) ) {
+          printf("Numerical precision loss in pairsPr.c\n");
           printf("12 %d %.16Le\n", seq[0], (long double) pr);
           exit(1);
         }
@@ -766,9 +935,22 @@ void MakePs_Pms( int i, int j, int seq[], int seqlength,
         pr = Pms[ pf_ij] *Qb[ pf_id ] *
           extraTerms /Qms[ pf_ij];
 
+#ifdef NUPACK_SAMPLE
+        if(!nupack_sample) {
+#endif // NUPACK_SAMPLE
           Pb[ pf_id] += pr;
+#ifdef NUPACK_SAMPLE          
+        } else {
+          samplingGlobals.pqms += pr;
+          if(!samplingGlobals.pqmsset && samplingGlobals.pqms >= samplingGlobals.Zqms) {
+            samplingGlobals.pqmsset = 1;
+            Pb[pf_id] = 1;
+          }
+        }
+#endif // NUPACK_SAMPLE
 
-        if( (pr > 1 + 1e-15 ) ) {
+        if( (pr > 1.0 + NUM_PRECISION ) ) {
+          printf("Numerical precision loss in pairsPr.c\n");
           printf("13\n");
           exit(1);
         }
@@ -841,10 +1023,24 @@ void prExterior_N3( int i,int j, int seq[], int seqlength,
             Q[ pf_m1j1] * extraTerms / Qb[ pf_ij];
 
         // BW K
+#ifdef NUPACK_SAMPLE
+          if(!nupack_sample) {
+#endif // NUPACK_SAMPLE
             P[ pf_i1m] += pr;
             P[ pf_m1j1] += pr;
+#ifdef NUPACK_SAMPLE
+          } else {
+            samplingGlobals.pqb += pr;
+            if(!samplingGlobals.pqbset && samplingGlobals.pqb >= samplingGlobals.Zqb) {
+              samplingGlobals.pqbset = 1;
+              P[pf_i1m] = 1;
+              P[pf_m1j1] = 1;
+            }
+          }
+#endif // NUPACK_SAMPLE
 
-          if( (pr > 1 + 1e-15 ) ) {
+          if( (pr > 1.0 + NUM_PRECISION ) ) {
+            printf("Numerical precision loss in pairsPr.c\n");
             printf("2 - %d %d %d %Le %Le %Le %Le %Le\n",i, multiNick, j,
                    (long double) Pb[ pf_ij], (long double) Q[ pf_i1m],
                    (long double) Q[ pf_m1j1], (long double) extraTerms,
@@ -898,10 +1094,24 @@ void prMultiBp_N3( int i, int j, int seq[], int seqlength,
         pr = Pb[ pf_ij] * Qm[ pf_i1d1] *
           Qms[ pf_dj1] * extraTerms / Qb[ pf_ij];
 
+#ifdef NUPACK_SAMPLE
+        if(!nupack_sample) {
+#endif // NUPACK_SAMPLE
           Pm[ pf_i1d1] += pr;
           Pms[ pf_dj1] += pr;
+#ifdef NUPACK_SAMPLE
+        } else {
+          samplingGlobals.pqb += pr;
+          if(!samplingGlobals.pqbset && samplingGlobals.pqb >= samplingGlobals.Zqb) {
+            samplingGlobals.pqbset = 1;
+            Pm[pf_i1d1] = 1;
+            Pms[pf_dj1] = 1;
+          }
+        }
+#endif // NUPACK_SAMPLE
 
-        if( (pr > 1 + 1e-15 ) ) {
+        if( (pr > 1.0 + NUM_PRECISION ) ) {
+          printf("Numerical precision loss in pairsPr.c\n");
           printf("16\n");
           exit(1);
         }

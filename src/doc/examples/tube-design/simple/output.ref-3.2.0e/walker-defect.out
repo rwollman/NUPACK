@@ -1,0 +1,39 @@
+NUPACK version: 3.2.0
+Backend: tubedefect
+Design index: 0
+Options: 
+    temperature: 310.150000
+    material: dna1998
+    sodium: 1.000000
+    magnesium: 0.000000
+    dangle_type: 1
+    use_long_helix: 0
+    allow_wobble: 0
+Elapsed time: 0.122099
+Domains:
+  - Name: a
+    Sequence: CGTGAACATCGGCGTGGTCGACCAACCCCACACAAAAAACCTA
+  - Name: a*
+    Sequence: TAGGTTTTTTGTGTGGGGTTGGTCGACCACGCCGATGTTCACG
+  - Name: b
+    Sequence: TTCCCTCTATATTTCTACACTCCCGACCACGCCGATGTTCACG
+  - Name: b*
+    Sequence: CGTGAACATCGGCGTGGTCGGGAGTGTAGAAATATAGAGGGAA
+Strands:
+  - Name: leg1
+    Sequence: CGTGAACATCGGCGTGGTCGACCAACCCCACACAAAAAACCTA
+  - Name: leg2
+    Sequence: TTCCCTCTATATTTCTACACTCCCGACCACGCCGATGTTCACG
+Objectives:
+  - Name: walker
+    Normalized defect: 0.009752
+    Max size: 2
+    Structures:
+      - Name: legs
+        Structure: ((((((((((((((((((((.......................+.......................))))))))))))))))))))
+        Sequence : CGTGAACATCGGCGTGGTCGACCAACCCCACACAAAAAACCTA+TTCCCTCTATATTTCTACACTCCCGACCACGCCGATGTTCACG
+        Free energy: -32.682136
+        Defect: 0.838486
+        Normalized defect: 0.009750
+        Concentration: 9.999980e-07
+        Target concentration: 1.000000e-06

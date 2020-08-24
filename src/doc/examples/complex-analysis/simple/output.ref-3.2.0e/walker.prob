@@ -1,0 +1,15 @@
+% NUPACK 3.2.0
+% Program: prob
+% Start time: Mon Mar  6 23:42:19 2017
+% Command: prob -material dna -multi input/walker-struct 
+% Sequence:  GGCTGGTTTCTGCTCTCTAGTTCGCGAGGTGCAATCTCCTATC+GTCTGGGATGCTGGATACTGAACCTAGAGAGCAGAAACCAGCC
+% Structure: ((((((((((((((((((((.......................+.......................))))))))))))))))))))
+% v(pi): 1
+% Parameters: DNA, 1998
+% Dangles setting: 1
+% Temperature (C): 37.0
+% Sodium concentration: 1.0000 M
+% Magnesium concentration: 0.0000 M
+%
+% Probability:
+1.272e-03
