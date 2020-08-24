@@ -1,0 +1,169 @@
+This is the help file for Distributions, a program that does
+thermodynamic analysis of interacting nucleic acid strands in a box
+where the partition functions for the complexes are known.  The
+calculation is described in Dirks, Bois, Schaeffer, Winfree, and
+Pierce, "Thermodynamic Analysis of interacting nucleic acid strands",
+SIAM Review, 2006, in press.  Variable names in the code and in this
+help file should be referenced with variable names in that paper.
+
+The program computes the population distributions for a small volume
+containing a few strands of nucleic acid.  In particular, it computes
+the probability distribution for the population of all possible
+complexes that can exist in the volume given the starting material,
+and the expected value of the population.
+
+
+USAGE: 
+  distributions [-flags] prefix[.suffix]
+
+  "prefix" is the prefix to the input files.  See below for further
+  description.  The .suffix can be included, but the suffix must be
+  one of the following:
+     cx
+     ocx
+     cx-epairs
+     ocx-epairs
+     ocx-ppairs
+     cx-mfe
+     ocx-mfe
+  If no suffix is given, a suffix of .cx is assumed.
+
+  The available flags are:
+  -sort [required argument]
+     sort = 1: the output is sorted by the expected value of the population 
+       of the permutations.  (Not valid for input of .cx files.)
+     sort = 2: the output is sorted first by complex ID number and then
+       by permutation ID number.  (Not valid for input of .cx files.)
+     sort = 3: the output is sorted first by complex expected value.  The 
+       permutations within each complex are then sorted by their expected
+       values.  (Not valid for input of .cx files.)
+     sort = 4: the output is sorted first by size of complexes and then 
+       lexicographically within each complex size.  I.e., say there are 
+       two strands, 1, and 2.  The ordering for complex size 2 is 1 1, 1 2, 
+       2 2.  The permutations are then sorted within each complex by 
+       permutation ID number.  (Not valid for input of .cx files.)
+     sort = 5 (default): the output is sorted by complex 
+       concentration.  Only complex information is reported (no 
+       permutation information).  This is the default for because the size
+       of $\Lambda$ gets very large if permutations are included.
+     sort = 6: the output is sorted by complex ID.  Only complex information 
+       is reported (no permutation information).
+     sort = 7: the output is sorted first by size of complexes and then 
+       lexicographically within each complex size.  I.e., say there are 
+       two strands, 1, and 2.  The ordering for complex size 2 is 1 1, 1 2, 
+       2 2.  Only complex information is reported (no permutation information).
+  -T [required argument] 
+     The temperature, in degrees C, at which the calculation will be
+     done.  Note that the partition functions used in the calculation
+     should be calculated at the same temperature.  The default is to 
+     look for a line in the .cx input file that has:
+	 % T = 23.6   
+     for example.  If no such line exists in the .cx file, the default
+     is T = 37.0.  The command line temperature overrides all other options.
+  -quiet [no argument]
+     Selecting this flag will supress output to the screen.
+  -maxsizelambda [required argument]
+     The maximum entries to be allowed in the set $\Lambda$.  I.e.,
+     how many populations to consider in the exact enumeration.
+     Default is 10 million.  Take care in adjusting this value.  Make
+     sure that the maximum stack size on your machine can handle a very
+     large array in RAM.  You can enter this argument in scientific
+     notation (such as 1e7) if you like.
+  -writelambda [no argument]
+     This flag is chosen if the contents of the set $\Lambda$ are to 
+     be written to a .Lam file.  The format of the file is shown below.
+     The default is NOT to write the .Lam file.
+  -writelogfile [no argument]
+     When this flag is selected, a log file is written which contains
+     information about the trust region steps and convergence.  Default
+     is not to write a log file.
+  -help [no argument]
+     Prints this README file to the screen.
+
+  There are two input files, prefix.count, and one of the following:
+    prefix.cx
+    prefix.ocx
+    prefix.cx-epairs
+    prefix.ocx-epairs
+    prefix.ocx-ppairs
+    prefix.cx-mfe
+    prefix.ocx-mfe
+
+  prefix.count has the following:
+     Let K be the number of single-species types present in the box.
+     The first K lines have the number of each type of single strand 
+     present in the box.  This must be an integer.  The last line of
+     the file contains the volume of the box IN LITERS.  This may be
+     entered in scientific notation, e.g., 1.4e-21.
+
+  The other input file contains the following:
+      Each row represents a permutation of a complex.  The first column 
+      is the complex ID number.  THE COMPLEX ID NUMBERS IN THE INPUT
+      FILE MUST GO FROM 1 TO THE TOTAL NUMBER OF COMPLEXES AND NOT
+      REPEAT ANY NUMBERS.  If the suffix for the file begins with "ocx",
+      the second column contains the ordered complex identifier.  If
+      the suffix begins with "cx", this column is omitted.  For all
+      formats, the next $|\Psi^0|$ entries in a row j of are the 
+      entries in column j of the matrix A.  The last entry in a row 
+      contains the free energy of the complex IN UNITS OF KCAL/MOL.  
+      This is $-kT \log Q_j$ (with kT [=] kcal/mol).  Subsequent columns 
+      may contain pertinent data for convenience (such as an MFE structure,
+      as is the case for prefix.cx-mfe and prefix.ocx-mfe), but are not 
+      used in this program.  A sample input file is found in Sample.ocx.
+
+
+  The output file are:
+      prefix.dist:
+	Column 1: Complex ID number
+	Column 2: Permutation ID number (if .ocx input, otherwise omitted)
+	Column 3 to K+3: Transpose of column of A corresponding to
+		         the complex.
+	Column K+4: Free energy of complex (as supplied by input file)
+	            IN KCAL/MOL.
+	Column K+5: The expecation value of the count for the complex.
+	Columns K+6 and on: The probability distribution for the population
+          of the complex.  The first column is the probability that $m_j = 0$,
+	  the second is the probability that $m_j = 1$, and so on.
+      prefix.Lam (only if -writelambda flag is used):
+	Each row corresponds to a population vector.  If the input is 
+	a .cx file (no permutations) or sort options 5 through 7 are chosen,
+	the first entry is a complex ID, the second is the population of that
+	complex in the population vector represented by the row.  The third
+	column is the next complex ID with a non-zero population, and the
+	fourth is its population, and so on.  If the input is a .ocx file
+	and the sort option is 1 through 4, the first entry is the complex
+	ID, the second is the permutation ID, and the third is the
+	population of that permutation.  The pattern continues for all
+	complexes with a non-zero population.  The final column in each row
+	for any type of input is the probability of that population vector
+	occuring at equilibrium.
+      prefix.log (only if -writelogfile flag is used):
+	This file contains information about the calculation.  It
+	includes the command used to execute the calculation, the time
+	the calculation was run, the trust region parameters, what the
+	input and output files are, etc. The free energy of the
+        solution in KCAL/LITER OF SOLUTION is also outputted.  The
+        reference state is a state where all strands are present but
+        free of base pairs, as in the Dirks, et al., paper.
+    Also, if the -quiet flag is not chosen, the following information is
+    written to the screen:
+	*The number of populations in Lambda.
+	*The free energy of the box.
+	*The elapsed time of the calculation.
+
+
+KNOWN WATCHOUTS: 
+--The calculation involves blocking off a big piece of
+  memory for $\Lambda$.  Choosing a option for the -maxsizelambda flag
+  controls how big this block of memory is.  You need to make sure
+  that the maximal allowed size of $\Lambda$ can be blocked off in 
+  memory, i.e., that it does not exceed the stack size on your
+  machine.  The program will seg fault if this is the case.
+--The size of $\Lambda$ grows very rapidly with the number of single 
+  strands present.  If permutations are incluluded, Lambda is typically
+  MUCH bigger than when they are not.  Be aware of this when choosing the
+  inputs.
+
+
+Justin Bois, Caltech, 3 September 2006
+bois@caltech.edu

@@ -1,0 +1,22 @@
+#
+# run all jobs to generate files in "output" directories
+#
+# Niles A. Pierce (27 January 2015)
+#
+
+cd designs
+./run_designs
+cd ..
+
+cd jacs04_walker
+./run_jacs04_walker
+cd ..
+
+cd jcc04_telomerase
+./run_jcc04_telomerase
+cd ..
+
+cd pnas04_hcr
+./run_pnas04_hcr
+cd ..
+
