@@ -1,0 +1,224 @@
+##===================================================================================================
+##                 Copyright 2015   NumScale SAS
+##
+##                   Distributed under the Boost Software License, Version 1.0.
+##                        See accompanying file LICENSE.txt or copy at
+##                            http://www.boost.org/LICENSE_1_0.txt
+##===================================================================================================
+sudo: false
+language: cpp
+
+matrix:
+  include:
+##===================================================================================================
+## Regression
+##==================================================================================================
+## g++ 6 AVX
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-6']
+      env: TOOLSET=g++-6 SIMD_EXT=-mavx OPT=-ftrack-macro-expansion=0 TARGETS=regression
+
+## g++ 4.8 SSE4
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-4.8']
+      env: TOOLSET=g++-4.8 SIMD_EXT=-msse4.1 OPT=-ftrack-macro-expansion=0 TARGETS=regression
+
+## g++ 5 AVX
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-5']
+      env: TOOLSET=g++-5 SIMD_EXT=-mavx OPT=-ftrack-macro-expansion=0 TARGETS=regression
+
+## g++ 5 SSE4
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-5']
+      env: TOOLSET=g++-5 SIMD_EXT=-msse4.1 OPT=-ftrack-macro-expansion=0 TARGETS=regression
+
+##===================================================================================================
+## Architecture
+##==================================================================================================
+## g++ 6 AVX
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-6']
+      env: TOOLSET=g++-6 SIMD_EXT=-mavx OPT=-ftrack-macro-expansion=0 TARGETS=architecture
+
+## g++ 4.8 SSE4
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-4.8']
+      env: TOOLSET=g++-4.8 SIMD_EXT=-msse4.1 OPT=-ftrack-macro-expansion=0 TARGETS=architecture
+
+## g++ 5 AVX
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-5']
+      env: TOOLSET=g++-5 SIMD_EXT=-mavx OPT=-ftrack-macro-expansion=0 TARGETS=architecture
+
+## g++ 5 SSE4
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-5']
+      env: TOOLSET=g++-5 SIMD_EXT=-msse4.1 OPT=-ftrack-macro-expansion=0 TARGETS=architecture
+
+##===================================================================================================
+## API
+##==================================================================================================
+## g++ 6 AVX
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-6']
+      env: TOOLSET=g++-6 SIMD_EXT=-mavx OPT=-ftrack-macro-expansion=0 TARGETS=api
+
+## g++ 4.8 SSE4
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-4.8']
+      env: TOOLSET=g++-4.8 SIMD_EXT=-msse4.1 OPT=-ftrack-macro-expansion=0 TARGETS=api
+
+## g++ 5 AVX
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-5']
+      env: TOOLSET=g++-5 SIMD_EXT=-mavx OPT=-ftrack-macro-expansion=0 TARGETS=api
+
+## g++ 5 SSE4
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-5']
+      env: TOOLSET=g++-5 SIMD_EXT=-msse4.1 OPT=-ftrack-macro-expansion=0 TARGETS=api
+
+##===================================================================================================
+## Functions
+##==================================================================================================
+## g++ 6 AVX
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-6']
+      env: TOOLSET=g++-6 SIMD_EXT=-mavx OPT=-ftrack-macro-expansion=0 TARGETS=function
+
+## g++ 4.8 SSE4
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-4.8']
+      env: TOOLSET=g++-4.8 SIMD_EXT=-msse4.1 OPT=-ftrack-macro-expansion=0 TARGETS=function
+
+## g++ 5 AVX
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-5']
+      env: TOOLSET=g++-5 SIMD_EXT=-mavx OPT=-ftrack-macro-expansion=0 TARGETS=function
+
+## g++ 5 SSE4
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-5']
+      env: TOOLSET=g++-5 SIMD_EXT=-msse4.1 OPT=-ftrack-macro-expansion=0 TARGETS=function
+
+##===================================================================================================
+## Constants
+##==================================================================================================
+## g++ 6 AVX
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-6']
+      env: TOOLSET=g++-6 SIMD_EXT=-mavx OPT=-ftrack-macro-expansion=0 TARGETS=constant
+
+## g++ 4.8 SSE4
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-4.8']
+      env: TOOLSET=g++-4.8 SIMD_EXT=-msse4.1 OPT=-ftrack-macro-expansion=0 TARGETS=constant
+
+## g++ 5 AVX
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-5']
+      env: TOOLSET=g++-5 SIMD_EXT=-mavx OPT=-ftrack-macro-expansion=0 TARGETS=constant
+
+## g++ 5 SSE4
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-5']
+      env: TOOLSET=g++-5 SIMD_EXT=-msse4.1 OPT=-ftrack-macro-expansion=0 TARGETS=constant
+
+##===================================================================================================
+# Prepare build
+##===================================================================================================
+before_script:
+  - export BOOST_ROOT=build/_install/include
+  - mkdir build
+  - cd build
+  - $TOOLSET --version
+  - cmake .. -DIS_TRAVIS_CI= -DCMAKE_CXX_COMPILER=$TOOLSET -DCMAKE_CXX_FLAGS="$SIMD_EXT $OPT -I$HOME/dispatch/include" -DSIMD_EXT=$SIMD_EXT -DTOOLSET=$TOOLSET
+
+##===================================================================================================
+# Build unit and run test
+##===================================================================================================
+script:
+  - make update.boost-header-only | grep -v "^-- " # Silent installation
+  - make  -j 4 -k  $TARGETS.unit
+  - ctest -j 4 -R ^$TARGETS.*.unit

@@ -1,0 +1,42 @@
+/** \file Version.h
+ * Macros that were used to compile the NUPACK libraries.
+ * Redefining them after NUPACK was compiled will in general
+ * have no effect, so this is not advised.
+ * The values of these macros are configured by CMake.
+ */
+
+#pragma once
+
+/// See nupack::Version for non-macro value
+#define NUPACK_VERSION_MAJOR @PROJECT_VERSION_MAJOR@
+#define NUPACK_VERSION_MINOR @PROJECT_VERSION_MINOR@
+#define NUPACK_VERSION_PATCH @PROJECT_VERSION_PATCH@
+
+/// Default value for nupack::MatlabCommand
+#define NUPACK_MATLAB_PATH @NUPACK_MATLAB_EXE@
+
+/// Default value for nupack::MathematicaCommand
+#define NUPACK_MATHEMATICA_PATH @NUPACK_MATHEMATICA_EXE@
+
+/// Default value for nupack::GitBranch
+#define NUPACK_GIT_BRANCH @NUPACK_GIT_BRANCH@
+
+/// Default value for nupack::GitRevision
+#define NUPACK_GIT_REVISION @NUPACK_GIT_REVISION@
+
+/// Default value for nupack::TotalRAM
+#define NUPACK_RAM_IN_MB @NUPACK_RAM_IN_MB@
+
+/// Default value for nupack::DefaultParametersPath
+#define NUPACK_PARAMETERS @NUPACK_PARAMETERS_DIR@
+
+/// Default value for nupack::DefaultDataPath
+#define NUPACK_DATA @NUPACK_DATA_DIR@
+
+/// Value of nupack::RandomDevice
+#define NUPACK_RANDOM_DEVICE @NUPACK_RANDOM_DEVICE@
+
+/// Default value for nupack::DebugInfo
+#define NUPACK_DEBUG_INFO @NUPACK_DEBUG_INFO@
+
+#define NUPACK_RENDERS @NUPACK_RENDERS@
