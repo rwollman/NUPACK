@@ -1,0 +1,16 @@
+{
+    "key": "simd",
+    "name": "SIMD",
+    "authors": [
+        "NumScale"
+    ],
+    "maintainers": [
+        "NumScale <open.boost.simd -at- numscale.com>"
+    ],
+    "description": "Types and functions for portable usage of SIMD instructions sets.",
+    "category": [
+        "Math",
+	    "System"
+    ]
+}
+
